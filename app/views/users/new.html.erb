@@ -1,0 +1,7 @@
+<div>
+    <h1 class="header">breadshelf is coming soon!</h1>
+    <%= turbo_frame_tag 'sign_up' do %>
+        <%= render 'early_notification_form', user: @user %>
+    <% end %>
+    <%= image_tag('crumbs.svg', alt: 'Breadshelf crumbs', class: 'icon--padded') %>
+</div>

@@ -1,0 +1,6 @@
+<%= simple_form_for user, html: { class: 'sign-up-form' } do |f| %>
+    <%= form_error_notification(user) %>
+
+    <%= f.email_field :email, placeholder: 'email', class: 'single-line-input' %>
+    <%= f.submit 'notify me', class: 'button' %>
+<% end %>

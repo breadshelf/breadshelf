@@ -1,0 +1,9 @@
+.icon {
+  width: 3em;
+  height: 3em;
+
+  &--padded {
+    @extend .icon;
+    padding: var(--padding-md);
+  }
+}

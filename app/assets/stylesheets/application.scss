@@ -1,8 +1,17 @@
 // Sassy
-@use "components/single_line_input";
+
+@import "config/variables";
+
+@import "components/input";
+@import "components/header";
+@import "components/icon";
+@import "components/button";
+
+@import "layouts/sign_up";
 
 body {
-  background-color: #353434;
-  color: white;
+  background-color: var(--background-color);
+  color: var(--text-color);
   text-align: center;
+  font-family: var(--font-family-serif);
 }
