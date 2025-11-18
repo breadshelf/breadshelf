@@ -1,7 +1,9 @@
-<div>
+<div class="sign-up-container">
+    <%= image_tag('crumbs.svg', alt: 'Breadshelf crumbs', class: 'icon') %>
     <h1 class="header">breadshelf is coming soon!</h1>
+    <p>Sign up to receive an email when we're ready for you. That will be the first and only email you receive from us.</p>
     <%= turbo_frame_tag 'sign_up' do %>
         <%= render 'early_notification_form', user: @user %>
     <% end %>
-    <%= image_tag('crumbs.svg', alt: 'Breadshelf crumbs', class: 'icon--padded') %>
+    <%= link_to('learn about us', '/about', class: 'learn-more') %>
 </div>

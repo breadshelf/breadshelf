@@ -14,4 +14,6 @@ Rails.application.routes.draw do
 
   resources :users, only: [:create, :show, :new]
   # resources :entries
+
+  get 'about' => 'information#about'
 end

@@ -1,7 +1,16 @@
+.sign-up-container {
+  text-align: center;
+}
+
 .sign-up-form {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
 
   gap: var(--padding-md);
+  margin: 1em;
+}
+
+.learn-more {
+  color: white;
+  text-decoration: underline;
 }

@@ -8,10 +8,10 @@
 @import "components/button";
 
 @import "layouts/sign_up";
+@import "layouts/about";
 
 body {
   background-color: var(--background-color);
   color: var(--text-color);
-  text-align: center;
   font-family: var(--font-family-serif);
 }
