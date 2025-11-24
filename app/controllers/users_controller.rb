@@ -3,7 +3,17 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show]
 
   def new
-    @user = User.new
+    @user_exists = clerk.user?
+
+    if @user_exists
+      @clerk_user = clerk.user
+      @user = User.find_or_create_by(clerk_id: @clerk_user.id) do |user|
+        user.unique_id = SecureRandom.uuid_v4
+        user.email = @clerk_user.email_addresses.first&.email_address
+        user.first_name = @clerk_user.first_name
+        user.last_name = @clerk_user.last_name
+      end
+    end
   end
 
   def show
