@@ -5,15 +5,23 @@ class UsersController < ApplicationController
   def new
     @user_exists = clerk.user?
 
-    puts "NOAHTEST #{clerk.user.inspect}"
     if @user_exists
       @clerk_user = clerk.user
-      puts "NOAHTEST FIND OUR CREATE BY #{@clerk_user.id}"
-      @user = User.find_or_create_by(clerk_id: @clerk_user.id) do |user|
-        user.unique_id = SecureRandom.uuid_v4
-        user.email = @clerk_user.email_addresses.first&.email_address
-        user.first_name = @clerk_user.first_name
-        user.last_name = @clerk_user.last_name
+
+      @user = User.find_by(clerk_id: @clerk_user.id)
+      if @user
+        @user.email = @clerk_user.email_addresses.first&.email_address
+        @user.first_name = @clerk_user.first_name
+        @user.last_name = @clerk_user.last_name
+      else
+        @user = User.create(
+          clerk_id: @clerk_user.id,
+          unique_id: SecureRandom.uuid_v4,
+          email: @clerk_user.email_addresses.first&.email_address,
+          first_name: @clerk_user.first_name,
+          last_name: @clerk_user.last_name
+        )
+        UserMailer.with(user: @user).welcome_email.deliver_later
       end
     end
   end
