@@ -16,5 +16,4 @@ Rails.application.routes.draw do
   # resources :entries
 
   get 'about' => 'information#about'
-  get 'sign_in' => 'auth#sign_in'
 end

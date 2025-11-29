@@ -50,6 +50,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_24_005123) do
     t.string "last_name"
     t.uuid "unique_id"
     t.datetime "updated_at", null: false
+    t.index ["clerk_id"], name: "index_users_on_clerk_id"
     t.index ["unique_id"], name: "index_users_on_unique_id"
   end
 

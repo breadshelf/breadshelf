@@ -5,8 +5,10 @@ class UsersController < ApplicationController
   def new
     @user_exists = clerk.user?
 
+    puts "NOAHTEST #{clerk.user.inspect}"
     if @user_exists
       @clerk_user = clerk.user
+      puts "NOAHTEST FIND OUR CREATE BY #{@clerk_user.id}"
       @user = User.find_or_create_by(clerk_id: @clerk_user.id) do |user|
         user.unique_id = SecureRandom.uuid_v4
         user.email = @clerk_user.email_addresses.first&.email_address
