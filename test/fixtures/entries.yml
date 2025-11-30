@@ -1,16 +1,16 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  user: one
-  book: one
+  user: amy
+  book: titan
   start_time: 2025-11-16 17:24:29
   end_time: 2025-11-16 17:30:29
   active: false
   crumbs: 1
 
 two:
-  user: two
-  book: two
+  user: noah
+  book: thinking_fast_and_slow
   start_time: 2025-11-16 17:24:29
   end_time: 2025-11-16 17:45:29
   active: false

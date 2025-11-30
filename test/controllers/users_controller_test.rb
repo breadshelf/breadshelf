@@ -3,6 +3,8 @@ require 'mocha/minitest'
 
 class UsersControlerTest < ActionDispatch::IntegrationTest
   test 'displays a sign up prompt when not signed in' do
+    clerk_sign_out
+
     get '/users/new'
 
     assert_response :success
@@ -10,10 +12,7 @@ class UsersControlerTest < ActionDispatch::IntegrationTest
   end
 
   test 'creates a user that does not already exist' do
-    mock_user = stub(id: 'user_1234', first_name: 'First', last_name: 'Last', email_addresses: [])
-    mock_clerk = stub(user?: true, user: mock_user)
-
-    UsersController.any_instance.stubs(:clerk).returns(mock_clerk)
+    clerk_sign_in(user_attrs: { id: 'user_1234' })
 
     get '/users/new'
     assert_response :success
@@ -23,14 +22,16 @@ class UsersControlerTest < ActionDispatch::IntegrationTest
   end
 
   test 'updates a user that already exists' do
-    user = users(:one)
+    user = users(:noah)
     user.clerk_id = 'user_1234'
-    user.save!
+    user.save
 
-    mock_user = stub(id: 'user_1234', first_name: 'First', last_name: 'Last', email_addresses: [])
-    mock_clerk = stub(user?: true, user: mock_user)
-
-    UsersController.any_instance.stubs(:clerk).returns(mock_clerk)
+    clerk_sign_in(user_attrs: {
+      id: 'user_1234',
+      first_name: 'First',
+      last_name: 'Last',
+      email_addresses: [stub(email_address: user.email)]
+    })
 
     get '/users/new'
     assert_response :success

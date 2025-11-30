@@ -1,9 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+titan:
   title: Titan
   author: Ron Chernow
 
-two:
+thinking_fast_and_slow:
   title: Thinking Fast and Slow
   author: Daniel Kahneman

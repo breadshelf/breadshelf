@@ -8,4 +8,10 @@ class UserTest < ActiveSupport::TestCase
     assert user1.save
     assert_not user2.save
   end
+
+  test 'email must be a valid email' do
+    user = User.new(email: 'notanemail')
+
+    assert_not user.save
+  end
 end
