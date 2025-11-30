@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   def new
     @user_exists = clerk.user?
 
+    # TODO: Move creation logic to a POST or PUT
     if @user_exists
       @clerk_user = clerk.user
 
@@ -13,8 +14,9 @@ class UsersController < ApplicationController
         @user.email = @clerk_user.email_addresses.first&.email_address
         @user.first_name = @clerk_user.first_name
         @user.last_name = @clerk_user.last_name
+        @user.save!
       else
-        @user = User.create(
+        @user = User.create!(
           clerk_id: @clerk_user.id,
           unique_id: SecureRandom.uuid_v4,
           email: @clerk_user.email_addresses.first&.email_address,
