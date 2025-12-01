@@ -21,6 +21,7 @@ gem 'simple_form'
 gem 'clerk-sdk-ruby', require: 'clerk'
 
 gem 'foreman'
+gem 'olive_branch'
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"

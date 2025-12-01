@@ -1,6 +1,7 @@
 <div class="sign-up-container" data-controller="clerk">
     <%= image_tag('crumbs.svg', alt: 'Breadshelf crumbs', class: 'icon') %>
     <h1 class="header">breadshelf is coming soon!</h1>
+
     <% if @user_exists %>
         <p>You're signed up! We'll update you soon. In the meantime ensure you follow us on social media.</p>
         <button data-action="click->clerk#signOut">Sign out</button> <%# TODO: REMOVE %>

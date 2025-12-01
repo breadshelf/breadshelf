@@ -16,6 +16,9 @@ module Breadshelf
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
+    excluded_routes = ->(env) { !env['PATH_INFO'].match(%r{^/api}) }
+    config.middleware.use OliveBranch::Middleware, inflection: 'camel', exclude_params: excluded_routes
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

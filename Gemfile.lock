@@ -217,6 +217,7 @@ GEM
     mocha (2.8.2)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.8.0)
+    multi_json (1.17.0)
     multipart-post (2.4.1)
     net-http (0.8.0)
       uri (>= 0.11.1)
@@ -249,6 +250,9 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.10-x86_64-linux-musl)
       racc (~> 1.4)
+    olive_branch (4.0.1)
+      multi_json
+      rails (>= 4.0)
     ostruct (0.6.3)
     parallel (1.27.0)
     parser (3.3.10.0)
@@ -464,6 +468,7 @@ DEPENDENCIES
   jbuilder
   kamal
   mocha
+  olive_branch
   pg (~> 1.1)
   propshaft
   puma (>= 5.0)
