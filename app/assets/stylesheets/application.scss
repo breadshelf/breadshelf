@@ -1,15 +1,13 @@
-// Sassy
+@use "config/variables";
 
-@import "config/variables";
+@use "components/input";
+@use "components/header";
+@use "components/icon";
+@use "components/button";
+@use "components/link";
 
-@import "components/input";
-@import "components/header";
-@import "components/icon";
-@import "components/button";
-@import "components/link";
-
-@import "layouts/sign_up";
-@import "layouts/about";
+@use "layouts/sign_up";
+@use "layouts/about";
 
 body {
   background-color: var(--background-color);
