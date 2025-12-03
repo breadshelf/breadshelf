@@ -26,6 +26,7 @@ export default class extends Controller {
   static values = {
     userExists: Boolean,
   };
+  static targets = ["message", "loading"];
 
   initialize() {
     fetch("/api/vars").then(async (response) => {
@@ -34,16 +35,15 @@ export default class extends Controller {
       const result = await response.json();
       this.clerk = new Clerk(result.clerkPublishableKey);
 
-      this.clerk.load().then(() => {
-        this.clerk.addListener(async (state) => {
-          // sign in when a user exists
-          if (state.user) {
-            await this.signIn();
-          } else {
-            this.renderClerkSignUp();
-          }
-        });
-      });
+      await this.clerk.load();
+
+      if (this.clerk.isSignedIn) {
+        await this.signIn();
+      } else {
+        this.renderClerkSignUp();
+      }
+
+      this.showAuthMessage();
     });
   }
 
@@ -65,5 +65,10 @@ export default class extends Controller {
     this.clerk.mountSignUp(clerkNode, {
       appearance: CLERK_APPEARANCE,
     });
+  }
+
+  showAuthMessage() {
+    this.messageTarget.hidden = false;
+    this.loadingTarget.hidden = true;
   }
 }
