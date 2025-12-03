@@ -8,7 +8,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     result = JSON.parse(response.body)
 
-    assert(result.values.length == 1)
-    assert(result['clerkPublishableKey'] == 'test-key')
+    assert_equal(result.values.length, 1)
+    assert_equal(result['clerkPublishableKey'], 'test-key')
   end
 end

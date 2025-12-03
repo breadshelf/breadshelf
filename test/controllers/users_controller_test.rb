@@ -17,7 +17,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
       get '/'
       assert_response :success
-      assert_dom 'p', "You're signed up! We'll update you soon. In the meantime ensure you follow us on social media."
+      assert_dom 'p', "You're signed up! We'll update you soon. In the meantime, make sure you're following us on social media!"
     end
   end
 
