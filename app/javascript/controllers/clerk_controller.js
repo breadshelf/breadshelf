@@ -29,6 +29,7 @@ export default class extends Controller {
   static targets = ["message", "loading"];
 
   initialize() {
+    console.log("window", window.location.toString());
     fetch("/api/vars").then(async (response) => {
       if (!response.ok) return;
 
@@ -43,7 +44,12 @@ export default class extends Controller {
         this.renderClerkSignUp();
       }
 
-      this.showAuthMessage();
+      // In development sso-callback in the path indicates we have received the callback and the page will reload
+      // We don't show the auth message (just show "loading...") b/c the non-auth view was flashing up
+      // since clerk wasn't initialized yet
+      if (!window.location.toString().includes("sso-callback")) {
+        this.showAuthMessage();
+      }
     });
   }
 
