@@ -29,7 +29,6 @@ export default class extends Controller {
   static targets = ["message", "loading"];
 
   initialize() {
-    console.log("window", window.location.toString());
     fetch("/api/vars").then(async (response) => {
       if (!response.ok) return;
 

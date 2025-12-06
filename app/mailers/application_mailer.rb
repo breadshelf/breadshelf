@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'developer@breadshelf.com'
+  default from: 'hello@breadshelf.com'
   layout 'mailer'
 end

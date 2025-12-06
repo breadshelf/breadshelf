@@ -1,6 +1,6 @@
 <div class="sign-up-container" data-controller="clerk">
-    <%= image_tag('crumbs.svg', alt: 'Breadshelf crumbs', class: 'icon') %>
     <h1 class="header">breadshelf is coming soon!</h1>
+    <%= image_tag('crumbs.svg', alt: 'breadshelf crumbs', class: 'icon') %>
 
     <div data-clerk-target="message" hidden="true">
         <% if @user_exists %>
@@ -14,5 +14,5 @@
     <div data-clerk-target="loading">
         <p>Loading...</p>
     </div>
-    <%= link_to('Learn about us', '/about', class: 'learn-more') %>
+    <%= link_to('Learn about us', '/about', class: 'link') %>
 </div>

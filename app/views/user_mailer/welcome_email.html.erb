@@ -1,4 +1,15 @@
-<h1>Welcome to breadshelf</h1>
-<p>
-You are here. Good job.
-</p>
+<div>
+    <% first_name = @user.first_name.titlecase %>
+    <h1>Welcome to breadshelf<%= first_name.present? ? ", #{first_name}" : '' %></h1>
+    <%= image_tag(attachments['slice.svg'].url, class: 'icon') %>
+    <p>We're happy you've joined us!</p>
+    <p>breadshelf is devoted to solving digital addiction through reading</p>
+    <p>You can learn about us <a href="<%= @about_url %>">here</a></p>
+    <h3>Here are our socials (but we prefer you quit)</h3>
+    <div class="socials">
+        <a href="https://www.instagram.com">Instagram</a>
+        <a href="https://www.tiktok.com">Tik Tok</a>
+        <a href="https://www.snapchat.com">Snapchat</a>
+    </div>
+    <p>Questions? Feedback? Reply to this email!</p>
+</div>
