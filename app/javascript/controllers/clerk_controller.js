@@ -28,7 +28,10 @@ export default class extends Controller {
   };
   static targets = ["message", "loading"];
 
-  initialize() {
+  connect() {
+    const clerkNode = document.getElementById("clerk-node");
+    clerkNode.innerHTML = '<div id="clerk-signup"></div>';
+
     fetch("/api/vars").then(async (response) => {
       if (!response.ok) return;
 
@@ -40,7 +43,7 @@ export default class extends Controller {
       if (this.clerk.isSignedIn) {
         await this.signIn();
       } else {
-        this.renderClerkSignUp();
+        this.mountClerkSignUp();
       }
 
       // In development sso-callback in the path indicates we have received the callback and the page will reload
@@ -50,6 +53,10 @@ export default class extends Controller {
         this.showAuthMessage();
       }
     });
+  }
+
+  disconnect() {
+    this.unmountClerkSignUp();
   }
 
   async signOut() {
@@ -65,11 +72,16 @@ export default class extends Controller {
     });
   }
 
-  renderClerkSignUp() {
-    const clerkNode = document.getElementById("clerk-node");
-    this.clerk.mountSignUp(clerkNode, {
+  mountClerkSignUp() {
+    const clerkSignUp = document.getElementById("clerk-signup");
+    this.clerk.mountSignUp(clerkSignUp, {
       appearance: CLERK_APPEARANCE,
     });
+  }
+
+  unmountClerkSignUp() {
+    const clerkSignUp = document.getElementById("clerk-signup");
+    this.clerk.unmountSignUp(clerkSignUp);
   }
 
   showAuthMessage() {
