@@ -1,15 +1,22 @@
 <div>
     <% first_name = @user.first_name.titlecase %>
     <h1>Welcome to breadshelf<%= first_name.present? ? ", #{first_name}" : '' %></h1>
-    <%= image_tag(attachments['slice.svg'].url, class: 'icon') %>
+    <%= image_tag(attachments['crumbs.svg'].url, class: 'icon') %>
     <p>We're happy you've joined us!</p>
-    <p>breadshelf is devoted to solving digital addiction through reading</p>
-    <p>You can learn about us <a href="<%= @about_url %>">here</a></p>
-    <h3>Here are our socials (but we prefer you quit)</h3>
+    <p>
+        breadshelf is devoted to solving digital addiction through reading.
+        You can learn more about us <a href="<%= @about_url %>">here</a>.
+    </p>
+    <p>
+        The breadshelf product is coming soon. We'll notify you when it's ready.
+        Do you have questions or feedback? Reply to this email!
+    </p>
+    <%= image_tag(attachments['slice.svg'].url, class: 'icon') %>
+    <p>We'd prefer you quit social media, but if you are on them follow us!</p>
     <div class="socials">
         <a href="https://www.instagram.com">Instagram</a>
         <a href="https://www.tiktok.com">Tik Tok</a>
         <a href="https://www.snapchat.com">Snapchat</a>
     </div>
-    <p>Questions? Feedback? Reply to this email!</p>
+    <p>&copy; <%= Date.today.year %> breadshelf</p>
 </div>
