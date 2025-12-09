@@ -10,17 +10,19 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root 'users#landing'
 
-  get 'about' => 'information#about'
+  scope module: :public do
+    root 'users#landing'
+    get 'about' => 'information#about'
 
-  resources :users, only: [:show, :new] do
-    collection do
-      put :sign_in
+    resources :users, only: [:show, :new] do
+      collection do
+        put :sign_in
+      end
     end
-  end
 
-  namespace :api do
-    get 'vars'
+    namespace :api do
+      get 'vars'
+    end
   end
 end

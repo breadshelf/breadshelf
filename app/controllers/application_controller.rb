@@ -8,6 +8,6 @@ class ApplicationController < ActionController::Base
   stale_when_importmap_changes
 
   def current_user
-    User.find_by(clerk_id: clerk.user.id) if clerk.user?
+    Public::User.find_by(clerk_id: clerk.user.id) if clerk.user?
   end
 end

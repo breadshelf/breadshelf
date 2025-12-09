@@ -10,18 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_24_005123) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_09_040701) do
+  create_schema "analytics"
+  create_schema "monitoring"
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
-  create_table "books", force: :cascade do |t|
+  create_table "public.books", force: :cascade do |t|
     t.string "author"
     t.datetime "created_at", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "entries", force: :cascade do |t|
+  create_table "public.entries", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.bigint "book_id", null: false
     t.datetime "created_at", null: false
@@ -34,7 +37,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_24_005123) do
     t.index ["user_id"], name: "index_entries_on_user_id"
   end
 
-  create_table "notes", force: :cascade do |t|
+  create_table "public.notes", force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false
     t.bigint "entry_id", null: false
@@ -42,7 +45,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_24_005123) do
     t.index ["entry_id"], name: "index_notes_on_entry_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "public.users", force: :cascade do |t|
     t.string "clerk_id"
     t.datetime "created_at", null: false
     t.string "email"
@@ -54,7 +57,15 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_24_005123) do
     t.index ["unique_id"], name: "index_users_on_unique_id"
   end
 
-  add_foreign_key "entries", "books"
-  add_foreign_key "entries", "users"
-  add_foreign_key "notes", "entries"
+  add_foreign_key "public.entries", "public.books"
+  add_foreign_key "public.entries", "public.users"
+  add_foreign_key "public.notes", "public.entries"
+
+  create_table "analytics.events", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "event", null: false
+    t.string "subject"
+    t.datetime "updated_at", null: false
+  end
+
 end
