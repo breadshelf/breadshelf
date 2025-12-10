@@ -1,0 +1,17 @@
+
+<h1>Events</h1>
+
+<% group_partition_number = 10 %>
+
+<h2>Total Events: <%= @total_events %></h2>
+
+<h3>Sign ups: <%= @sign_up_count %></h3>
+<h3>Sign ins: <%= @sign_in_count %></h3>
+
+<h3>Page Views:</h3>
+<ul>
+    <% @page_view_counts.each do |page, count| %>
+        <li><%= page %> - <%= count %></li>
+    <% end %>
+</ul>
+

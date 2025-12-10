@@ -25,4 +25,9 @@ Rails.application.routes.draw do
       get 'vars'
     end
   end
+
+
+  scope path: '/admin', as: 'admin' do
+    resources :events, controller: 'analytics/events', only: [:index]
+  end
 end
