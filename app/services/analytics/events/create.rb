@@ -7,9 +7,8 @@ module Analytics
 
     def call
       Event.create!(event: @event, subject: @subject)
-    rescue StandardError
-      # Monitoring event
-      # Cannot prevent real functionality
+    rescue StandardError => e
+      logger.error('Analytics::Events::Create - Failed to create event: ' + e.message)
     end
   end
 end
