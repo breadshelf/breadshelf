@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_09_040701) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_13_212825) do
   create_schema "analytics"
   create_schema "monitoring"
 
@@ -66,6 +66,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_09_040701) do
     t.string "event", null: false
     t.string "subject"
     t.datetime "updated_at", null: false
+    t.index ["subject"], name: "index_events_on_subject"
   end
 
 end

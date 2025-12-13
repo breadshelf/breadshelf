@@ -1,9 +1,10 @@
+require 'digest'
 
 module Analytics
   class Events::Create < ApplicationService
     def initialize(event, subject)
       @event = event
-      @subject = subject
+      @subject = Digest::SHA256.hexdigest(subject)
     end
 
     def call
