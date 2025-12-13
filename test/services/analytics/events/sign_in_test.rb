@@ -55,5 +55,15 @@ module Analytics
       assert(event.created_at >= time_before)
       assert(event.created_at <= time_after)
     end
+
+    test 'does not create event when subject is nil or empty' do
+      initial_count = Analytics::Event.where(event: Analytics::Event::EventName::SIGN_IN).count
+
+      Events::SignIn.call(nil)
+      Events::SignIn.call('')
+
+      final_count = Analytics::Event.where(event: Analytics::Event::EventName::SIGN_IN).count
+      assert_equal(initial_count, final_count)
+    end
   end
 end
