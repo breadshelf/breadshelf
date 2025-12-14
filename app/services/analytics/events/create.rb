@@ -8,7 +8,7 @@ module Analytics
     def call
       Event.create!(event: @event, subject: @subject)
     rescue StandardError => e
-      logger.error('Analytics::Events::Create - Failed to create event: ' + e.message)
+      Rails.logger.error('Analytics::Events::Create - Failed to create event: ' + e.message)
     end
   end
 end

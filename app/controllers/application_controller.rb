@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   class InternalStatusError < StandardError; end
 
   rescue_from(NotFoundError, with: :not_found)
-  rescue_from(InternalStatusError, with: :internal_error)
+  rescue_from(InternalStatusError, with: :internal_server_error)
 
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
     render file: "#{Rails.root}/public/404.html", status: :not_found, layout: false
   end
 
-  def internal_error
-    render file: "#{Rails.root}/public/500.html", status: :internal_service_error, layout: false
+  def internal_server_error
+    render file: "#{Rails.root}/public/500.html", status: :internal_server_error, layout: false
   end
 end
