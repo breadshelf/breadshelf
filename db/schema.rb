@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_14_222309) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_17_002149) do
   create_schema "analytics"
   create_schema "monitoring"
 
@@ -43,6 +43,20 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_14_222309) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "public.settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "public.user_settings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.boolean "enabled", default: false, null: false
+    t.uuid "setting_id", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "user_id", null: false
+  end
+
   create_table "public.users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "clerk_id"
     t.datetime "created_at", null: false
@@ -56,6 +70,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_14_222309) do
   add_foreign_key "public.entries", "public.books"
   add_foreign_key "public.entries", "public.users"
   add_foreign_key "public.notes", "public.entries"
+  add_foreign_key "public.user_settings", "public.settings"
+  add_foreign_key "public.user_settings", "public.users"
 
   create_table "analytics.events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false

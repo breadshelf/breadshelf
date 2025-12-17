@@ -20,10 +20,14 @@ module Public
         created = true
         user = User.create!(
           clerk_id: @clerk_user.id,
-          unique_id: SecureRandom.uuid_v4,
           email: @clerk_user.email_addresses.first&.email_address,
           first_name: @clerk_user.first_name,
           last_name: @clerk_user.last_name
+        )
+        UserSetting.create!(
+          user: user,
+          setting: Setting.find_by(name: Public::Setting::Name::ALLOW_EMAILS),
+          enabled: true
         )
         UserMailer.with(user: user).welcome_email.deliver_later
       end

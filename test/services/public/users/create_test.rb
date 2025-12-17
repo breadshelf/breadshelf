@@ -2,6 +2,11 @@ require 'test_helper'
 
 module Public
   class CreateTest < ActiveSupport::TestCase
+
+    setup do
+      Setting.create!(name: Public::Setting::Name::ALLOW_EMAILS)
+    end
+
     test 'returns false with missing user' do
       result = Users::Create.call(nil)
 
@@ -23,6 +28,9 @@ module Public
       assert_equal(user.email, 'amy2@test.com')
       assert_equal(user.first_name, 'First')
       assert_equal(user.last_name, 'Last')
+
+      user_settings = UserSetting.where(user_id: user.id)
+      assert_equal(0, user_settings.count)
     end
 
     test 'returns true and creates a user' do
@@ -36,6 +44,9 @@ module Public
       assert_equal(user.email, 'peyton@test.com', 'email is wrong')
       assert_equal(user.first_name, 'Peyton', 'first name is wrong')
       assert_equal(user.last_name, 'Celuch', 'last name is wrong')
+
+      user_settings = UserSetting.where(user_id: user.id)
+      assert_equal(1, user_settings.count)
     end
   end
 end
