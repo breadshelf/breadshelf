@@ -1,14 +1,10 @@
 
 module Public
   class UsersController < ApplicationController
-    before_action :set_user, only: [:show]
 
     def landing
       @user_exists = clerk.user?
       Analytics::Events::PageView.call(request.path)
-    end
-
-    def show
     end
 
     def sign_in
@@ -25,10 +21,6 @@ module Public
     end
 
     private
-
-    def set_user
-      @user = Public::User.find(params[:id])
-    end
 
     def sign_up_params
       params.require(:user).permit(:email)

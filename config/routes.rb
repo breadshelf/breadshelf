@@ -15,11 +15,13 @@ Rails.application.routes.draw do
     root 'users#landing'
     get 'about' => 'information#about'
 
-    resources :users, only: [:show, :new] do
+    resources :users do
       collection do
         put :sign_in
       end
     end
+
+    resources :user_settings, only: [:index, :update]
 
     namespace :api do
       get 'vars'
