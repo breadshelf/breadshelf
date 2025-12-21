@@ -1,8 +1,0 @@
-
-<div>
-    <%= form_with(url: user_settings_path, method: :put) do |form| %>
-        <%= form.checkbox(:allow_emails, value: @user_settings[:allow_emails] ? '1' : '0') %>
-        <%= form.label(:allow_emails, "Emails are currently #{@user_settings[:allow_emails] ? 'on' : 'off'}") %>
-        <%= form.submit('Update settings') %>
-    <% end %>
-</div>

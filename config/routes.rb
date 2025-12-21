@@ -18,10 +18,10 @@ Rails.application.routes.draw do
     resources :users do
       collection do
         put :sign_in
+        get :settings
+        put 'settings' => 'users#update_settings'
       end
     end
-
-    resources :user_settings, only: [:index, :update]
 
     namespace :api do
       get 'vars'

@@ -1,0 +1,11 @@
+
+<div>
+    <p><%= flash[:notice] %></p>
+    <%= form_with url: '/users/settings', method: :put do |f| %>
+        <div>
+            <%= f.checkbox(:allow_emails, { checked: @user_settings[:allow_emails] }) %>
+            <%= f.label(:allow_emails, "Allow emails") %>
+        </div>
+        <%= f.submit('Update settings') %>
+    <% end %>
+</div>
