@@ -1,11 +1,22 @@
 
-<div>
-    <p><%= flash[:notice] %></p>
-    <%= form_with url: '/users/settings', method: :put do |f| %>
-        <div>
-            <%= f.checkbox(:allow_emails, { checked: @user_settings[:allow_emails] }) %>
-            <%= f.label(:allow_emails, "Allow emails") %>
-        </div>
-        <%= f.submit('Update settings') %>
+<div class="settings">
+    <h1>Settings</h1>
+    <%= image_tag('slice.svg', alt: 'breadshelf slice', class: 'icon') %>
+    <% message = flash[:notice] && flash[:notice]['message'] %>
+    <% status = flash[:notice] && flash[:notice]['status'] %>
+
+    <% if flash[:notice] %>
+        <p class="flash <%= status %>"><%= message %></p>
+    <% else %>
+        <p style="visibility: hidden;">blank</p>
     <% end %>
+    <div class="form">
+        <%= form_with url: '/users/settings', method: :put do |f| %>
+            <div class="element">
+                <%= f.checkbox(:allow_emails, { checked: @user_settings[:allow_emails] }) %>
+                <%= f.label(:allow_emails, "I want to receive emails") %>
+            </div>
+            <%= f.submit('Update', class: 'button') %>
+        <% end %>
+    </div>
 </div>

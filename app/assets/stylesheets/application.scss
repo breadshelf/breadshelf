@@ -5,10 +5,12 @@
 @use "components/icon";
 @use "components/button";
 @use "components/link";
+@use "components/flash";
 
 @use "layouts/sign_up";
 @use "layouts/about";
 @use "layouts/events";
+@use "layouts/settings";
 
 body {
   background-color: var(--background-color);

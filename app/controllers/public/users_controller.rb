@@ -31,12 +31,9 @@ module Public
     def update_settings
       raise(NotFoundError) if current_user.nil?
 
-      allow_emails = settings_params[:allow_emails] == '1'
-      allow_email_setting = Public::Setting.find_or_create_by!(name: Public::Setting::Name::ALLOW_EMAILS)
-      user_setting = current_user.user_settings.find_or_create_by!(setting_id: allow_email_setting.id)
-      user_setting.update!(enabled: allow_emails)
+      Public::Users::Settings::Update.call(current_user, settings_params)
   
-      redirect_to '/users/settings', notice: 'Settings updated successfully'
+      redirect_to '/users/settings', notice: { message: 'Settings updated', status: 'success' }
     end
 
     private

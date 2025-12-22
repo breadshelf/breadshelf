@@ -52,6 +52,10 @@ export default class extends Controller {
     this.unmountClerkSignUp(getClerk());
   }
 
+  signOut() {
+    getClerk().signOut();
+  }
+
   async signIn() {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
