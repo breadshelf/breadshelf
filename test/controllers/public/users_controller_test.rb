@@ -43,5 +43,52 @@ module Public
         assert_response :ok
       end
     end
+
+    class SettingsTests < UsersControllerTest
+      test 'requires authentication' do
+        clerk_sign_out
+        get '/users/settings'
+
+        assert_response :not_found
+      end
+
+      test 'displays user settings when authenticated' do
+        user = users(:amy)
+        
+        setting = Public::Setting.find_or_create_by!(name: Public::Setting::Name::ALLOW_EMAILS)
+        Public::UserSetting.find_or_create_by!(user_id: user.id, setting_id: setting.id) do |us|
+          us.enabled = true
+        end
+
+        clerk_sign_in(user_attrs: { id: user.clerk_id })
+
+        get '/users/settings'
+
+        assert_response :success
+        assert_dom('input[type="checkbox"][name="allow_emails"][checked="checked"]')
+      end
+    end
+
+    class UpdateSettingsTests < UsersControllerTest
+      test 'requires authentication' do
+        post '/users/settings'
+
+        assert_response :not_found
+      end
+
+      test 'updates user settings and redirects' do
+        user = users(:amy)
+        clerk_sign_in(user_attrs: { id: user.clerk_id })
+
+        assert(user.reload.allow_emails? == false)
+
+        put '/users/settings', params: { allow_emails: '1' }
+
+        assert_redirected_to('/users/settings')
+        follow_redirect!
+        assert_dom('p.flash', /Settings updated/)
+        assert(user.reload.allow_emails?)
+      end
+    end
   end
 end
