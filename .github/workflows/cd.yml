@@ -8,7 +8,7 @@ permissions:
   id-token: write
 
 jobs:
-  build-image:
+  deploy-infra:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,9 +34,28 @@ jobs:
       - name: Terraform Apply
         run: terraform -chdir=./infra apply -auto-approve tfplan
 
+  build-and-push-image:
+    needs: deploy-infra
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.1
+        with:
+          aws-region: us-east-2
+          role-to-assume: arn:aws:iam::040865381987:role/gha_role
+          role-session-name: GHASession
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: breadshelf/breadshelf:latest
+          tags: 040865381987.dkr.ecr.us-east-2.amazonaws.com/breadshelf:latest
