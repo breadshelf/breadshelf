@@ -1,7 +1,6 @@
 
 module Public
   class UsersController < ApplicationController
-
     def landing
       @user_exists = clerk.user?
       Analytics::Events::PageView.call(request.path)
@@ -32,7 +31,7 @@ module Public
       raise(NotFoundError) if current_user.nil?
 
       Public::Users::Settings::Update.call(current_user, settings_params)
-  
+
       redirect_to '/users/settings', notice: { message: 'Settings updated', status: 'success' }
     end
 

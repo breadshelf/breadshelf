@@ -2,7 +2,6 @@ require 'test_helper'
 
 module Public
   class CreateTest < ActiveSupport::TestCase
-
     setup do
       Setting.create!(name: Public::Setting::Name::ALLOW_EMAILS)
     end

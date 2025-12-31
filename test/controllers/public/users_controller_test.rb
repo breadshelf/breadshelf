@@ -54,7 +54,7 @@ module Public
 
       test 'displays user settings when authenticated' do
         user = users(:amy)
-        
+
         setting = Public::Setting.find_or_create_by!(name: Public::Setting::Name::ALLOW_EMAILS)
         Public::UserSetting.find_or_create_by!(user_id: user.id, setting_id: setting.id) do |us|
           us.enabled = true
