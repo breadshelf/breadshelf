@@ -19,7 +19,6 @@ default: &default
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-
 development:
   <<: *default
   database: breadshelf_development
@@ -43,7 +42,7 @@ development:
   #port: 5432
 
   # Schema search path. The server defaults to $user,public
-  #schema_search_path: myapp,sharedapp,public
+  schema_search_path: public,analytics,monitoring
 
   # Minimum log levels, in increasing order:
   #   debug5, debug4, debug3, debug2, debug1,

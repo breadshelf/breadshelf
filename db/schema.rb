@@ -10,51 +10,75 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_24_005123) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_17_002149) do
+  create_schema "analytics"
+  create_schema "monitoring"
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pgcrypto"
 
-  create_table "books", force: :cascade do |t|
+  create_table "public.books", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "author"
     t.datetime "created_at", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "entries", force: :cascade do |t|
+  create_table "public.entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "active", default: true, null: false
-    t.bigint "book_id", null: false
+    t.uuid "book_id", null: false
     t.datetime "created_at", null: false
     t.integer "crumbs", default: 0, null: false
     t.datetime "end_time"
     t.datetime "start_time"
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.index ["book_id"], name: "index_entries_on_book_id"
-    t.index ["user_id"], name: "index_entries_on_user_id"
+    t.uuid "user_id", null: false
   end
 
-  create_table "notes", force: :cascade do |t|
+  create_table "public.notes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false
-    t.bigint "entry_id", null: false
+    t.uuid "entry_id", null: false
     t.datetime "updated_at", null: false
-    t.index ["entry_id"], name: "index_notes_on_entry_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "public.settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "public.user_settings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.boolean "enabled", default: false, null: false
+    t.uuid "setting_id", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "user_id", null: false
+  end
+
+  create_table "public.users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "clerk_id"
     t.datetime "created_at", null: false
     t.string "email"
     t.string "first_name"
     t.string "last_name"
-    t.uuid "unique_id"
     t.datetime "updated_at", null: false
     t.index ["clerk_id"], name: "index_users_on_clerk_id"
-    t.index ["unique_id"], name: "index_users_on_unique_id"
   end
 
-  add_foreign_key "entries", "books"
-  add_foreign_key "entries", "users"
-  add_foreign_key "notes", "entries"
+  add_foreign_key "public.entries", "public.books"
+  add_foreign_key "public.entries", "public.users"
+  add_foreign_key "public.notes", "public.entries"
+  add_foreign_key "public.user_settings", "public.settings"
+  add_foreign_key "public.user_settings", "public.users"
+
+  create_table "analytics.events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "event", null: false
+    t.string "subject"
+    t.datetime "updated_at", null: false
+    t.index ["subject"], name: "index_events_on_subject"
+  end
+
 end

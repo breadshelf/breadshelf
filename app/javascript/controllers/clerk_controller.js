@@ -1,5 +1,5 @@
-import { Clerk } from "@clerk/clerk-js";
 import { Controller } from "@hotwired/stimulus";
+import { initializeClerk, getClerk } from "init_clerk";
 
 const CLERK_APPEARANCE = {
   variables: {
@@ -29,21 +29,14 @@ export default class extends Controller {
   static targets = ["message", "loading"];
 
   connect() {
-    const clerkNode = document.getElementById("clerk-node");
-    clerkNode.innerHTML = '<div id="clerk-signup"></div>';
+    initializeClerk().then((clerk) => {
+      const clerkNode = document.getElementById("clerk-node");
+      clerkNode.innerHTML = '<div id="clerk-signup"></div>';
 
-    fetch("/api/vars").then(async (response) => {
-      if (!response.ok) return;
-
-      const result = await response.json();
-      this.clerk = new Clerk(result.clerkPublishableKey);
-
-      await this.clerk.load();
-
-      if (this.clerk.isSignedIn) {
-        await this.signIn();
+      if (clerk.isSignedIn) {
+        this.signIn();
       } else {
-        this.mountClerkSignUp();
+        this.mountClerkSignUp(clerk);
       }
 
       // In development sso-callback in the path indicates we have received the callback and the page will reload
@@ -56,11 +49,11 @@ export default class extends Controller {
   }
 
   disconnect() {
-    this.unmountClerkSignUp();
+    this.unmountClerkSignUp(getClerk());
   }
 
-  async signOut() {
-    await this.clerk.signOut();
+  signOut() {
+    getClerk().signOut();
   }
 
   async signIn() {
@@ -72,16 +65,16 @@ export default class extends Controller {
     });
   }
 
-  mountClerkSignUp() {
+  mountClerkSignUp(clerk) {
     const clerkSignUp = document.getElementById("clerk-signup");
-    this.clerk.mountSignUp(clerkSignUp, {
+    clerk.mountSignUp(clerkSignUp, {
       appearance: CLERK_APPEARANCE,
     });
   }
 
-  unmountClerkSignUp() {
+  unmountClerkSignUp(clerk) {
     const clerkSignUp = document.getElementById("clerk-signup");
-    this.clerk.unmountSignUp(clerkSignUp);
+    clerk.unmountSignUp(clerkSignUp);
   }
 
   showAuthMessage() {
