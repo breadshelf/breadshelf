@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      ecr_repo_arn: ${{ steps.tf-outputs.outputs.ecr_repo_arn }}
+      ecr_repo_url: ${{ steps.tf-outputs.outputs.ecr_repo_url }}
 
     steps:
       - name: Checkout code
@@ -40,8 +40,8 @@ jobs:
       - name: Get Outputs
         id: tf-outputs
         run: |
-          ecr_repo_arn=$(terraform -chdir=./infra output -raw ecr_repo_arn)
-          echo "ecr_repo_arn=$ecr_repo_arn" >> $GITHUB_OUTPUT
+          ecr_repo_url=$(terraform -chdir=./infra output -raw ecr_repo_url)
+          echo "ecr_repo_url=$ecr_repo_url" >> $GITHUB_OUTPUT
 
   build-and-push-image:
     needs: deploy-infra
@@ -68,5 +68,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ needs.deploy-infra.outputs.ecr_repo_arn }}:latest
-            ${{ needs.deploy-infra.outputs.ecr_repo_arn }}:${{ github.sha }}
+            ${{ needs.deploy-infra.outputs.ecr_repo_url }}:latest
+            ${{ needs.deploy-infra.outputs.ecr_repo_url }}:${{ github.sha }}

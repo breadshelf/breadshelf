@@ -11,6 +11,6 @@ resource "aws_ecr_repository" "breadshelf_repo" {
   }
 }
 
-output "ecr_repo_arn" {
-  value = aws_ecr_repository.breadshelf_repo.arn
+output "ecr_repo_url" {
+  value = aws_ecr_repository.breadshelf_repo.repository_url
 }
