@@ -11,6 +11,9 @@ jobs:
   deploy-infra:
     runs-on: ubuntu-latest
 
+    outputs:
+      ecr_repo_arn: ${{ steps.tf-outputs.outputs.ecr_repo_arn }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -19,7 +22,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v5.1.1
         with:
           aws-region: us-east-2
-          role-to-assume: arn:aws:iam::040865381987:role/gha_role
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           role-session-name: GHASession
 
       - name: Setup Terraform
@@ -33,6 +36,12 @@ jobs:
 
       - name: Terraform Apply
         run: terraform -chdir=./infra apply -auto-approve tfplan
+
+      - name: Get Outputs
+        id: tf-outputs
+        run: |
+          ecr_repo_arn=$(terraform -chdir=./infra output -raw ecr_repo_arn)
+          echo "ecr_repo_arn=$ecr_repo_arn" >> $GITHUB_OUTPUTS
 
   build-and-push-image:
     needs: deploy-infra
@@ -53,9 +62,12 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      # TODO: Replace w/ infra output value
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: 040865381987.dkr.ecr.us-east-2.amazonaws.com/breadshelf:latest
+          tags: |
+            ${{ needs.deploy-infra.outputs.ecr_repo_arn }}:latest
+            ${{ needs.deploy-infra.outputs.ecr_repo_arn }}:${{ github.sha }}
