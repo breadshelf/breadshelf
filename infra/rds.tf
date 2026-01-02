@@ -6,7 +6,7 @@ resource "aws_db_subnet_group" "private_group" {
 
 resource "aws_db_instance" "postgres" {
     allocated_storage = 20
-    engine = "postgresql"
+    engine = "postgres"
     instance_class = "db.t3.micro"
     identifier = "breadshelf"
     username = "breadshelf"
