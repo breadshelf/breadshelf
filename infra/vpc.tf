@@ -6,13 +6,24 @@ resource "aws_internet_gateway" "gateway" {
   vpc_id = aws_vpc.main.id
 }
 
-resource "aws_subnet" "private" {
+resource "aws_subnet" "private_1" {
   cidr_block = "10.0.1.0/24"
   vpc_id     = aws_vpc.main.id
+  availability_zone = "us-east-2a"
 
   tags = {
     Name = "Private"
   }
+}
+
+resource "aws_subnet" "private_2" {
+ cidr_block = "10.0.2.0/24"
+ vpc_id = aws_vpc.main.id
+ availability_zone = "us-east-2b"
+
+ tags = {
+    Name = "Private"
+ }
 }
 
 resource "aws_subnet" "public" {
@@ -34,7 +45,7 @@ resource "aws_route_table" "public" {
   }
 }
 
-resource "aws_route_table_association" "private" {
+resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public.id
 }

@@ -1,7 +1,7 @@
 
 resource "aws_db_subnet_group" "private_group" {
     name = "private"
-    subnet_ids = [aws_subnet.private.id]
+    subnet_ids = [aws_subnet.private_1.id, aws_subnet.private_2.id]
 }
 
 resource "aws_db_instance" "postgres" {
