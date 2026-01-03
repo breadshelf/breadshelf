@@ -7,6 +7,9 @@ on:
 permissions:
   id-token: write
 
+env:
+  TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+
 jobs:
   deploy-infra:
     runs-on: ubuntu-latest
