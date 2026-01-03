@@ -73,3 +73,5 @@ jobs:
           tags: |
             ${{ needs.deploy-infra.outputs.ecr_repo_url }}:latest
             ${{ needs.deploy-infra.outputs.ecr_repo_url }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
