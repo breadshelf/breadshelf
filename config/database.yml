@@ -87,7 +87,9 @@ production:
   primary: &primary_production
     <<: *default
     database: breadshelf_production
-    url: <%= ENV['DATABASE_URL'] %>
+    username: breadshelf
+    password: <%= ENV['DATABASE_PASSWORD'] %>
+    host: <%= ENV['DATABASE_HOST'] %>
   cache:
     <<: *primary_production
     database: breadshelf_production_cache

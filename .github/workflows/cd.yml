@@ -122,5 +122,6 @@ jobs:
         run: bundle exec kamal setup --skip-push
         env:
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          DATABASE_URL: "postgresql://breadshelf:${{ secrets.DB_PASSWORD }}@${{ needs.deploy-infra.outputs.db_host }}/breadshelf_production"
+          DATABASE_HOST: ${{ needs.deploy-infra.outputs.db_host }}
+          DATABASE_PASSWORD: ${{ secrets.DB_PASSWORD }}
           SERVER_IP_ADDRESS: ${{ needs.deploy-infra.outputs.ec2_public_ip }}
