@@ -57,8 +57,7 @@ registry:
 # SSH configuration for connecting to servers
 ssh:
   user: ec2-user
-  key_data:
-    - SSH_PRIVATE_KEY
+  keys: ["~/.ssh/id_rsa"]
   # key: config/deploy_key
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
