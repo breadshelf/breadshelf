@@ -5,5 +5,5 @@ variable "db_password" {
 
 variable "ec2_public_key" {
   description = "Public key for EC2 key pair"
-  type = string
+  type        = string
 }

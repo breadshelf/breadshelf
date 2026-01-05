@@ -13,8 +13,9 @@ resource "aws_db_instance" "postgres" {
   username             = "breadshelf"
   db_subnet_group_name = aws_db_subnet_group.private_group.name
   password             = var.db_password
+  skip_final_snapshot  = true
 }
 
 output "db_host" {
-    value = aws_db_instance.postgres.domain
+  value = aws_db_instance.postgres.domain
 }
