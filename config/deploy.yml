@@ -46,7 +46,7 @@ servers:
 #
 proxy:
   ssl: true
-  host: breadshelf.com
+  # host: breadshelf.com
 
 # Where you keep your container images.
 registry:
