@@ -4,42 +4,11 @@ service: breadshelf
 # Name of the container image (use your-user/app-name on external registries).
 image: breadshelf
 
-# Deploy to these servers.
-servers:
-  web:
-    - 192.168.0.1
-  # job:
-  #   hosts:
-  #     - 192.168.0.1
-  #   cmd: bin/jobs
-
-# Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
-# If used with Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
-#
-# Using an SSL proxy like this requires turning on config.assume_ssl and config.force_ssl in production.rb!
-#
-# Don't use this when deploying to multiple web servers (then you have to terminate SSL at your load balancer).
-#
-# proxy:
-#   ssl: true
-#   host: app.example.com
-
-# Where you keep your container images.
-registry:
-  # Alternatives: hub.docker.com / registry.digitalocean.com / ghcr.io / ...
-  server: localhost:5555
-
-  # Needed for authenticated registries.
-  # username: your-user
-
-  # Always use an access token rather than real password when possible.
-  # password:
-  #   - KAMAL_REGISTRY_PASSWORD
-
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
   secret:
     - RAILS_MASTER_KEY
+    - DB_PASSWORD
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
@@ -58,24 +27,55 @@ env:
     # Log everything from Rails
     # RAILS_LOG_LEVEL: debug
 
+# Deploy to these servers.
+servers:
+  web:
+    - <%= ENV["SERVER_IP_ADDRESS"] %>
+  # job:
+  #   hosts:
+  #     - 192.168.0.1
+  #   cmd: bin/jobs
+
+# Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
+# If used with Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
+#
+# Using an SSL proxy like this requires turning on config.assume_ssl and config.force_ssl in production.rb!
+#
+# Don't use this when deploying to multiple web servers (then you have to terminate SSL at your load balancer).
+#
+proxy:
+  ssl: true
+  host: breadshelf.com
+
+# Where you keep your container images.
+registry:
+  # Alternatives: hub.docker.com / registry.digitalocean.com / ghcr.io / ...
+  server: 040865381987.dkr.ecr.us-east-2.amazonaws.com/breadshelf
+  username: AWS
+  password: <%= %x(aws ecr get-login-password) %>
+
+# SSH configuration for connecting to servers
+ssh:
+  user: ubuntu
+  # key: config/deploy_key
+
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
 # "bin/kamal logs -r job" will tail logs from the first server in the job section.
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
   shell: app exec --interactive --reuse "bash"
   logs: app logs -f
-  dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"
+  # dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"
 
 # Use a persistent storage volume for sqlite database files and local Active Storage files.
 # Recommended to change this to a mounted volume path that is backed up off server.
-volumes:
-  - "breadshelf_storage:/rails/storage"
+# volumes:
+#   - "breadshelf_storage:/rails/storage"
 
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
 # hitting 404 on in-flight requests. Combines all files from new and old
 # version inside the asset_path.
 asset_path: /rails/public/assets
-
 
 # Configure the image builder.
 builder:
@@ -90,11 +90,6 @@ builder:
   # secrets:
   #   - GITHUB_TOKEN
   #   - RAILS_MASTER_KEY
-
-# Use a different ssh user than root
-# ssh:
-#   user: app
-
 # Use accessory services (secrets come from .kamal/secrets).
 # accessories:
 #   db:

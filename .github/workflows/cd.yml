@@ -9,6 +9,7 @@ permissions:
 
 env:
   TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+  TF_VAR_ec2_public_key: ${{ secrets.EC2_PUBLIC_KEY }}
 
 jobs:
   deploy-infra:
@@ -16,6 +17,8 @@ jobs:
 
     outputs:
       ecr_repo_url: ${{ steps.tf-outputs.outputs.ecr_repo_url }}
+      db_host: ${{ steps.tf-outputs.outputs.db_host }}
+      ec2_public_ip: ${{ steps.tf-outputs.outputs.ec2_public_ip }}
 
     steps:
       - name: Checkout code
@@ -45,6 +48,12 @@ jobs:
         run: |
           ecr_repo_url=$(terraform -chdir=./infra output -raw ecr_repo_url)
           echo "ecr_repo_url=$ecr_repo_url" >> $GITHUB_OUTPUT
+
+          db_host=$(terraform -chdir=./infra output -raw db_host)
+          echo "db_host=$db_host" >> $GITHUB_OUTPUT
+
+          ec2_public_ip=$(terraform -chdir=./infra output -raw ec2_public_ip)
+          echo "ec2_public_ip=$ec2_public_ip" >> $GITHUB_OUTPUT
 
   build-and-push-image:
     needs: deploy-infra
@@ -78,3 +87,38 @@ jobs:
             ${{ needs.deploy-infra.outputs.ecr_repo_url }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  deploy-app:
+    needs: [deploy-infra, build-and-push-image]
+    runs-on: ubuntu-latest
+
+    env:
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.1
+        with:
+          aws-region: us-east-2
+          role-to-assume: arn:aws:iam::040865381987:role/gha_role
+          role-session-name: GHASession
+
+      - name: Create env file
+        run: |
+          echo "DATABASE_URL=postgresql://breadshelf_user:${{ secrets.DB_PASSWORD }}@${{ needs.deploy-infra.outputs.db_host }}:5432/breadshelf_production" >> .env
+          echo "RAILS_ENV=production" >> .env
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Deploy command
+        run: bundle exec kamal setup --skip-push
+        env:
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          SERVER_IP_ADDRESS: ${{ needs.deploy-infra.outputs.ec2_public_ip }}

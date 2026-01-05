@@ -4,6 +4,10 @@ resource "aws_vpc" "main" {
 
 resource "aws_internet_gateway" "gateway" {
   vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "breadshelf-ig"
+  }
 }
 
 resource "aws_subnet" "private_1" {

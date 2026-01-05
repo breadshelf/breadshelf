@@ -14,3 +14,7 @@ resource "aws_db_instance" "postgres" {
   db_subnet_group_name = aws_db_subnet_group.private_group.name
   password             = var.db_password
 }
+
+output "db_host" {
+    value = aws_db_instance.postgres.domain
+}
