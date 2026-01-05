@@ -17,5 +17,5 @@ resource "aws_db_instance" "postgres" {
 }
 
 output "db_host" {
-  value = aws_db_instance.postgres.domain
+  value = aws_db_instance.postgres.endpoint
 }
