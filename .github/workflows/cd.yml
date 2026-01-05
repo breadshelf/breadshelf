@@ -109,7 +109,7 @@ jobs:
 
       - name: Create env file
         run: |
-          echo "DATABASE_URL=postgresql://breadshelf_user:${{ secrets.DB_PASSWORD }}@${{ needs.deploy-infra.outputs.db_host }}/breadshelf_production" >> .env
+          echo "DATABASE_URL=postgresql://breadshelf:${{ secrets.DB_PASSWORD }}@${{ needs.deploy-infra.outputs.db_host }}/breadshelf_production" >> .env
           echo "RAILS_ENV=production" >> .env
 
       - name: Set up Ruby
