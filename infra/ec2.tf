@@ -63,6 +63,7 @@ resource "aws_instance" "server" {
   vpc_security_group_ids      = [aws_security_group.rails.id]
   associate_public_ip_address = true
   key_name                    = aws_key_pair.rails.key_name
+  user_data                   = file("${path.module}/user-data.sh")
 
   tags = {
     Name = "Breadshelf"
