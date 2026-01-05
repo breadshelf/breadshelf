@@ -1,4 +1,7 @@
-yum update -y
-amazon-linux-extras install docker -y
-service docker start
-usermod -a -G docker ec2-user
+sudo yum update -y
+
+sudo yum install -y docker
+
+sudo service docker start
+
+sudo usermod -aG docker ec2-user
