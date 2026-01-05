@@ -5,7 +5,7 @@ resource "aws_db_subnet_group" "private_group" {
 }
 
 resource "aws_security_group" "rds" {
-  name        = "rails-sg"
+  name        = "rds-sg"
   description = "Security group for RDS connection"
   vpc_id      = aws_vpc.main.id
 
