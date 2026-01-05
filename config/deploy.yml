@@ -50,7 +50,7 @@ proxy:
 # Where you keep your container images.
 registry:
   # Alternatives: hub.docker.com / registry.digitalocean.com / ghcr.io / ...
-  server: 040865381987.dkr.ecr.us-east-2.amazonaws.com/breadshelf
+  server: 040865381987.dkr.ecr.us-east-2.amazonaws.com
   username: AWS
   password: <%= %x(aws ecr get-login-password) %>
 
