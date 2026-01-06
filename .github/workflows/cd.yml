@@ -125,3 +125,6 @@ jobs:
           DATABASE_HOST: ${{ needs.deploy-infra.outputs.db_host }}
           DATABASE_PASSWORD: ${{ secrets.DB_PASSWORD }}
           SERVER_IP_ADDRESS: ${{ needs.deploy-infra.outputs.ec2_public_ip }}
+          CLERK_API_SECRET: ${{ secrets.CLERK_API_SECRET }}
+          CLERK_PUBLISHABLE_KEY: ${{ vars.CLERK_PUBLISHABLE_KEY }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
