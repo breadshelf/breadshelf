@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   scope module: :public do
     root 'users#landing'
     get 'about' => 'information#about'
+    get 'data_policy' => 'information#data_policy'
+    get 'privacy_policy' => 'information#privacy_policy'
 
     resources :users do
       collection do
