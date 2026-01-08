@@ -5,7 +5,9 @@
     <div data-clerk-target="message" hidden="true">
         <% if @user_exists %>
             <p>You're signed up! We'll update you soon. In the meantime, make sure you're following us on social media!</p>
-            <button class="button" data-action="click->clerk#signOut">Sign out</button> <%# TODO: REMOVE %>
+            <% if Rails.env == 'development' %>
+                <button class="button" data-action="click->clerk#signOut">Sign out</button>
+            <% end %>
         <% else %>
             <p>Sign up to receive an email when we're ready for you.</p>
         <% end %>
