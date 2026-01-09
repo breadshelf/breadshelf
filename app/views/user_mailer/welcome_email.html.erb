@@ -1,7 +1,7 @@
 <div>
     <% first_name = @user.first_name.titlecase %>
     <h1>Welcome to breadshelf<%= first_name.present? ? ", #{first_name}" : '' %></h1>
-    <%= image_tag(attachments['crumbs.svg'].url, class: 'icon') %>
+    <%= image_tag(attachments['crumbs.png'].url, class: 'icon') %>
     <p>We're happy you've joined us!</p>
     <p>
         breadshelf is devoted to solving digital addiction through reading.
@@ -11,7 +11,7 @@
         The breadshelf product is coming soon. We'll notify you when it's ready.
         Do you have questions or feedback? Reply to this email!
     </p>
-    <%= image_tag(attachments['slice.svg'].url, class: 'icon') %>
+    <%= image_tag(attachments['slice.png'].url, class: 'icon') %>
     <p>We'd prefer you quit social media, but if you are on them follow us!</p>
     <div class="socials">
         <a href="https://www.instagram.com">Instagram</a>
