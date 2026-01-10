@@ -5,16 +5,24 @@
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,200;0,400;0,700;1,400&display=swap');
 
-      body {
+      .container {
         background-color: #121212;
         color: white;
         text-align: center;
-        font-family: 'Libre Caslon Text', sans-serif;
-        width: 50%;
+        width: 80%;
         margin: 0 auto;
+        padding: 2em;
       }
 
-      h1, h3 {
+      h1, p, a {
+        font-family: 'Libre Caslon Text', serif;
+      }
+
+      p {
+        font-size: 1.2em;
+      }
+
+      h1 {
         font-weight: 400;
       }
 
@@ -23,17 +31,14 @@
         padding: 1px;
       }
 
-      a:hover {
-        background-color: white;
-        color: #121212;
-      }
-
       .socials {
-        display: flex;
-        flex-direction: row;
-        gap: 1em;
+        display: inline;
         margin: 0 auto;
         justify-content: center;
+      }
+
+      .link {
+         margin: 0 0.5em;
       }
 
       .icon {

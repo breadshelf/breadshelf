@@ -1,4 +1,4 @@
-<div>
+<div class="container">
     <% first_name = @user.first_name.titlecase %>
     <h1>Welcome to breadshelf<%= first_name.present? ? ", #{first_name}" : '' %></h1>
     <%= image_tag(attachments['crumbs.png'].url, class: 'icon') %>
@@ -12,11 +12,11 @@
         Do you have questions or feedback? Reply to this email!
     </p>
     <%= image_tag(attachments['slice.png'].url, class: 'icon') %>
-    <p>We'd prefer you quit social media, but if you are on them follow us!</p>
+    <p>We'd prefer you quit social media, but if you're on them follow us!</p>
     <div class="socials">
-        <a href="https://www.instagram.com">Instagram</a>
-        <a href="https://www.tiktok.com">Tik Tok</a>
-        <a href="https://www.snapchat.com">Snapchat</a>
+        <a class="link" href="https://www.instagram.com">Instagram</a>
+        <a class="link" href="https://www.tiktok.com">Tik Tok</a>
+        <a class="link" href="https://www.snapchat.com">Snapchat</a>
     </div>
     <p>&copy; <%= Date.today.year %> breadshelf</p>
 </div>
