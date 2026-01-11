@@ -9,7 +9,7 @@ module Public
       setting = user_settings
         .joins(:setting)
         .find_by(settings: { name: Public::Setting::Name::ALLOW_EMAILS })
-      setting ? setting.enabled : false
+      setting.present? ? setting.enabled : true
     end
   end
 end

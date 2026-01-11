@@ -15,5 +15,27 @@ module Public
 
       assert_not(user.save)
     end
+
+    test 'allow_emails? returns true when setting is enabled' do
+      user = User.create!(email: 'test@test.com')
+      setting = Public::Setting.find_or_create_by!(name: Setting::Name::ALLOW_EMAILS)
+      Public::UserSetting.create!(user: user, setting: setting, enabled: true)
+
+      assert(user.allow_emails?)
+    end
+
+    test 'allow_emails? returns false when setting is disabled' do
+      user = User.create!(email: 'test@test.com')
+      setting = Public::Setting.find_or_create_by!(name: Setting::Name::ALLOW_EMAILS)
+      Public::UserSetting.create!(user: user, setting: setting, enabled: false)
+
+      assert_not(user.allow_emails?)
+    end
+
+
+    test 'allow_emails? returns true when setting is not set' do
+      user = User.create!(email: 'test@test.com')
+      assert(user.allow_emails?)
+    end
   end
 end
