@@ -18,7 +18,14 @@
   justify-content: center;
 }
 
-.learn-more {
-  color: white;
-  text-decoration: underline;
+.learn-more-link {
+  margin-top: 1em;
+}
+
+.socials {
+  display: flex;
+  flex-direction: row;
+  gap: 2em;
+  margin: 1em auto;
+  justify-content: center;
 }

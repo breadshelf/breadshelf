@@ -1,6 +1,9 @@
 <div class="sign-up-container" data-controller="clerk">
     <h1 class="header">breadshelf is coming soon!</h1>
     <%= image_tag('crumbs.svg', alt: 'breadshelf crumbs', class: 'icon') %>
+    <div data-clerk-target="loading">
+        <p>Loading...</p>
+    </div>
 
     <div data-clerk-target="message" hidden="true">
         <% if @user_exists %>
@@ -13,10 +16,10 @@
         <% end %>
         <div id="clerk-node" class="clerk-container"></div>
     </div>
-    <div data-clerk-target="loading">
-        <p>Loading...</p>
+    
+    <div class="learn-more-link">
+        <%= link_to('Learn about us', '/about', class: 'link',) %>
     </div>
-    <%= link_to('Learn about us', '/about', class: 'link') %>
     <div class="socials">
         <a class="link" href="https://www.instagram.com/readonbreadshelf" target="_blank">Instagram</a>
         <a class="link" href="https://www.tiktok.com/@readonbreadshelf" target="_blank">Tik Tok</a>
