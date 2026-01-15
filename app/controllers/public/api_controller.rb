@@ -4,7 +4,8 @@ module Public
     skip_before_action :verify_authenticity_token, only: [:deliverability_event]
 
     def deliverability_event
-      Rails.logger.info("Deliverability Event Received: #{request.body}")
+      Rails.logger.info("Deliverability Event Received: #{request.body.read}")
+      Rails.logger.info("Deliverability Event Params: #{params.inspect}")
       head :ok
     end
 
