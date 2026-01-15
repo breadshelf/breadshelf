@@ -2,15 +2,9 @@ require 'test_helper'
 
 module Public
   class ApiControllerTest < ActionDispatch::IntegrationTest
-    test 'result only includes clerk publishable key' do
-      ENV['CLERK_PUBLISHABLE_KEY'] = 'test-key'
-
-      get '/api/vars'
-
-      result = JSON.parse(response.body)
-
-      assert_equal(result.values.length, 1)
-      assert_equal(result['clerkPublishableKey'], 'test-key')
+    test 'deliverability event logs the event and responds with ok' do
+      post '/api/deliverability_event', params: { event: 'bounce', email: 'help@email.com' }
+      assert_response :ok
     end
   end
 end

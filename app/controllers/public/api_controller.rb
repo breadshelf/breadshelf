@@ -1,8 +1,15 @@
 
 module Public
   class ApiController < ApplicationController
-    def vars
-      render json: { clerk_publishable_key: ENV['CLERK_PUBLISHABLE_KEY'] }
+    def deliverability_event
+      Rails.logger.info("Deliverability Event Received: #{request.body}")
+      head :ok
+    end
+
+    private
+
+    def deliverability_event_params
+      params.permit
     end
   end
 end

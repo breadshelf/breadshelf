@@ -26,7 +26,7 @@ Rails.application.routes.draw do
     end
 
     namespace :api do
-      get 'vars'
+      post 'deliverability_event'
     end
   end
 
