@@ -18,6 +18,7 @@ module Public
     private
 
     def parse_emails_from_event
+      Rails.logger.info('Public::Emails::Suppressor - Processing email suppression for event type: ' + @message['notificationType'])
       case @message['notificationType']
       when 'Bounce'
         bounce = @message['bounce']
