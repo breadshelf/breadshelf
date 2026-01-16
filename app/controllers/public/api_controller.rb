@@ -4,8 +4,15 @@ module Public
     skip_before_action :verify_authenticity_token, only: [:deliverability_event]
 
     def deliverability_event
+      Rails.logger.info('Deliverability Event Received')
       raw_json = request.body.read
-      Rails.logger.info("Deliverability Event Received: #{raw_json}")
+
+      verifier = Aws::SNS::MessageVerifier.new
+      unless verifier.authentic?(raw_json)
+        Rails.logger.error("Invalid SNS message signature #{raw_json}")
+        head :forbidden
+        return
+      end
 
       json = JSON.parse(raw_json)
 
