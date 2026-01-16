@@ -11,7 +11,7 @@ module Public
 
       Public::Emails::Suppressor.call(json)
       head :ok
-    rescue e
+    rescue StandardError => e
       Rails.logger.error("Error processing deliverability event: #{e.message}")
       head :internal_server_error
     end
