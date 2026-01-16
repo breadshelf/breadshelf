@@ -5,8 +5,14 @@ module Public
 
     def deliverability_event
       Rails.logger.info("Deliverability Event Received: #{request.body.read}")
-      Rails.logger.info("Deliverability Event Params: #{params.inspect}")
+
+      raw_json = request.body.read
+      json = JSON.parse(raw_json)
+
+      Public::Emails::Suppressor.call(json)
       head :ok
+    rescue
+      head :internal_server_error
     end
 
     private
