@@ -9,7 +9,7 @@ module Public
 
       verifier = Aws::SNS::MessageVerifier.new
       unless verifier.authentic?(raw_json)
-        Rails.logger.error("Invalid SNS message signature #{raw_json}")
+        Rails.logger.error('Invalid SNS message signature')
         head :forbidden
         return
       end

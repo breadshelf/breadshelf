@@ -8,5 +8,11 @@ module Public
       post '/api/deliverability_event', params: { event: 'bounce', email: 'help@email.com' }, as: :json
       assert_response :ok
     end
+
+    test 'deliverability event with invalid signature responds with forbidden' do
+      Aws::SNS::MessageVerifier.any_instance.stubs(:authentic?).returns(false)
+      post '/api/deliverability_event', params: { event: 'bounce', email: 'help@email.com' }, as: :json
+      assert_response :forbidden
+    end
   end
 end
