@@ -1,5 +1,8 @@
+@use "../mixins/mobile_responsive" as m;
+
 .settings {
-  width: 50%;
+  @include m.mobile-container;
+
   margin: 1em auto;
   text-align: center;
 }

@@ -1,4 +1,33 @@
+@use "../mixins/mobile_responsive" as m;
+
 .about-container {
-  width: 50%;
-  margin: 0 auto;
+  @include m.mobile-container;
+}
+
+.recommendations {
+  display: flex;
+  flex-direction: row;
+  gap: 3em;
+
+  @include m.mobile-responsive {
+    flex-direction: column;
+    gap: 1.5em;
+  }
+
+  .book {
+    width: 40%;
+
+    @include m.mobile-responsive {
+      width: 100%;
+    }
+  }
+
+  .title {
+    font-size: 2em;
+    margin: 0;
+  }
+
+  .author {
+    font-size: 1em;
+  }
 }

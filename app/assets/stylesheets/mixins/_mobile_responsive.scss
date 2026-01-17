@@ -1,0 +1,13 @@
+@mixin mobile-responsive {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin mobile-container {
+  width: 50%;
+
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+}
