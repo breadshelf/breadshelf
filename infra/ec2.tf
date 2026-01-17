@@ -55,6 +55,33 @@ resource "aws_security_group" "rails" {
   }
 }
 
+
+resource "aws_iam_role" "ec2_cloudwatch" {
+  name = "ec2-cloudwatch-role"
+  
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      }
+    }]
+  })
+}
+
+# Attach CloudWatch policy
+resource "aws_iam_role_policy_attachment" "cloudwatch_agent" {
+  role       = aws_iam_role.ec2_cloudwatch.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
+resource "aws_iam_instance_profile" "ec2_cloudwatch" {
+  name = "ec2-cloudwatch-profile"
+  role = aws_iam_role.ec2_cloudwatch.name
+}
+
 resource "aws_instance" "server" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.small"
@@ -64,6 +91,7 @@ resource "aws_instance" "server" {
   associate_public_ip_address = true
   key_name                    = aws_key_pair.rails.key_name
   user_data                   = file("${path.module}/user-data.sh")
+  iam_instance_profile = aws_iam_instance_profile.ec2_cloudwatch.name
 
   tags = {
     Name = "Breadshelf"

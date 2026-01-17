@@ -40,6 +40,14 @@ servers:
   #     - 192.168.0.1
   #   cmd: bin/jobs
 
+logging:
+  driver: awslogs
+  options:
+    awslogs-region: us-east-2
+    awslogs-group: breadshelf-logs
+    awslogs-stream: breadshelf-web
+    awslogs-create-group: "true"
+
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
 # If used with Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
 #
