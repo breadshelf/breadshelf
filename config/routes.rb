@@ -26,7 +26,9 @@ Rails.application.routes.draw do
     end
 
     namespace :api do
-      post 'deliverability_event'
+      # post 'deliverability_event'
+      post 'email_bounce'
+      post 'email_complaint'
     end
   end
 

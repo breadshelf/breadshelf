@@ -1,25 +1,30 @@
 
 module Public
   class ApiController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: [:deliverability_event]
+    skip_before_action :verify_authenticity_token, only: [:email_bounce, :email_complaint]
 
-    def deliverability_event
-      Rails.logger.info('Deliverability Event Received')
+    def email_bounce
+      Rails.logger.info('Email Bounce Event Received')
       raw_json = request.body.read
-
-      verifier = Aws::SNS::MessageVerifier.new
-      unless verifier.authentic?(raw_json)
-        Rails.logger.error('Invalid SNS message signature')
-        head :forbidden
-        return
-      end
-
       json = JSON.parse(raw_json)
 
-      Public::Emails::Suppressor.call(json)
+
+      Public::Emails::Postmark::Suppressor.call(json)
       head :ok
     rescue StandardError => e
-      Rails.logger.error("Error processing deliverability event: #{e.message}")
+      Rails.logger.error("Error processing email bounce event: #{e.message}")
+      head :internal_server_error
+    end
+
+    def email_complaint
+      Rails.logger.info('Email Complaint Event Received')
+      raw_json = request.body.read
+      json = JSON.parse(raw_json)
+
+      Public::Emails::Postmark::Suppressor.call(json)
+      head :ok
+    rescue StandardError => e
+      Rails.logger.error("Error processing email complaint event: #{e.message}")
       head :internal_server_error
     end
   end

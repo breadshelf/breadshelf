@@ -1,6 +1,6 @@
 
 module Public
-  class Emails::Suppressor < ApplicationService
+  class Emails::Aws::Suppressor < ApplicationService
     def initialize(json)
       @json = json
       @message = JSON.parse(@json['Message'])
@@ -18,7 +18,7 @@ module Public
     private
 
     def parse_emails_from_event
-      Rails.logger.info('Public::Emails::Suppressor - Processing email suppression for event type: ' + @message['notificationType'])
+      Rails.logger.info('Public::Emails::Aws::Suppressor - Processing email suppression for event type: ' + @message['notificationType'])
       case @message['notificationType']
       when 'Bounce'
         bounce = @message['bounce']
@@ -37,7 +37,7 @@ module Public
       user = Public::User.find_by(email: email)
       return unless user
 
-      Rails.logger.info('Public::Emails::Suppressor - Suppressing email for user ID: ' + user.id.to_s + ', email: ' + email)
+      Rails.logger.info('Public::Emails::Aws::Suppressor - Suppressing email for user ID: ' + user.id.to_s + ', email: ' + email)
       user_setting = user.user_settings.find_or_create_by!(
         setting: Public::Setting.find_by(name: Public::Setting::Name::ALLOW_EMAILS)
       )

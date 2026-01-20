@@ -1,18 +1,37 @@
 require 'test_helper'
 
 module Public
-  class ApiControllerTest < ActionDispatch::IntegrationTest
-    test 'deliverability event logs the event and responds with ok' do
-      Public::Emails::Suppressor.expects(:call).once.returns(true)
-      Aws::SNS::MessageVerifier.any_instance.stubs(:authentic?).returns(true)
-      post '/api/deliverability_event', params: { event: 'bounce', email: 'help@email.com' }, as: :json
+  class EmailBounceTest < ActionDispatch::IntegrationTest
+    
+    test 'successful bounce' do
+      Public::Emails::Postmark::Suppressor.expects(:call).once.returns(true)
+
+      post '/api/email_bounce', params: { 'RecordType' => 'Bounce', 'Email' => 'test@email.com' }, as: :json
       assert_response :ok
     end
 
-    test 'deliverability event with invalid signature responds with forbidden' do
-      Aws::SNS::MessageVerifier.any_instance.stubs(:authentic?).returns(false)
-      post '/api/deliverability_event', params: { event: 'bounce', email: 'help@email.com' }, as: :json
-      assert_response :forbidden
+    test 'bounce with error' do
+      Public::Emails::Postmark::Suppressor.expects(:call).once.raises(StandardError.new('Test error'))
+
+      post '/api/email_bounce', params: { 'RecordType' => 'Bounce', 'Email' => 'test@email.com' }, as: :json
+      assert_response :internal_server_error
+    end
+  end
+
+  class EmailComplainTest < ActionDispatch::IntegrationTest
+
+    test 'successful complaint' do
+      Public::Emails::Postmark::Suppressor.expects(:call).once.returns(true)
+
+      post '/api/email_complaint', params: { 'RecordType' => 'Complaint', 'Email' => 'test@email.com' }, as: :json
+      assert_response :ok
+    end
+
+    test 'complaint with error' do
+      Public::Emails::Postmark::Suppressor.expects(:call).once.raises(StandardError.new('Test error'))
+
+      post '/api/email_complaint', params: { 'RecordType' => 'Complaint', 'Email' => 'test@email.com' }, as: :json
+      assert_response :internal_server_error
     end
   end
 end
