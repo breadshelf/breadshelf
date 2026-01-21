@@ -55,10 +55,32 @@ resource "aws_security_group" "rails" {
   }
 }
 
+resource "aws_eip" "rails_eip" {
+  domain = "vpc"
+  region = "us-east-2"
+
+  tags = {
+    Name = "breadshelf-eip"
+  }
+}
+
+resource "aws_network_interface" "rails_eni" {
+  subnet_id       = aws_subnet.public.id
+  security_groups = [aws_security_group.rails.id]
+
+  tags = {
+    Name = "breadshelf-eni"
+  }
+}
+
+resource "aws_eip_association" "rails_eip_association" {
+  network_interface_id = aws_network_interface.rails_eni.id
+  allocation_id        = aws_eip.rails_eip.id
+}
 
 resource "aws_iam_role" "ec2_cloudwatch" {
   name = "ec2-cloudwatch-role"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
@@ -86,11 +108,12 @@ resource "aws_instance" "server" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.small"
 
-  subnet_id                   = aws_subnet.public.id
-  vpc_security_group_ids      = [aws_security_group.rails.id]
-  associate_public_ip_address = true
-  key_name                    = aws_key_pair.rails.key_name
-  user_data                   = file("${path.module}/user-data.sh")
+  primary_network_interface {
+    network_interface_id = aws_network_interface.rails_eni.id
+  }
+
+  key_name             = aws_key_pair.rails.key_name
+  user_data            = file("${path.module}/user-data.sh")
   iam_instance_profile = aws_iam_instance_profile.ec2_cloudwatch.name
 
   tags = {
