@@ -16,7 +16,7 @@ module Public
 
     def parse_email_from_event
       Rails.logger.info('Public::Emails::Postmark::Suppressor - Processing email suppression for event type: ' + @json['RecordType'].to_s)
-      
+
       @json['Email']
     end
 

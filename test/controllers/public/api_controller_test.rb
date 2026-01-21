@@ -2,7 +2,6 @@ require 'test_helper'
 
 module Public
   class EmailBounceTest < ActionDispatch::IntegrationTest
-    
     test 'successful bounce' do
       Public::Emails::Postmark::Suppressor.expects(:call).once.returns(true)
 
@@ -19,7 +18,6 @@ module Public
   end
 
   class EmailComplainTest < ActionDispatch::IntegrationTest
-
     test 'successful complaint' do
       Public::Emails::Postmark::Suppressor.expects(:call).once.returns(true)
 
