@@ -20,6 +20,9 @@ gem 'jbuilder'
 gem 'simple_form'
 gem 'clerk-sdk-ruby', require: 'clerk'
 
+gem 'flipper'
+gem 'flipper-active_record'
+gem 'flipper-ui'
 gem 'foreman'
 gem 'olive_branch'
 

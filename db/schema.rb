@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_16_024254) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_07_172335) do
   create_schema "analytics"
   create_schema "monitoring"
 
@@ -34,6 +34,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_16_024254) do
     t.datetime "start_time"
     t.datetime "updated_at", null: false
     t.uuid "user_id", null: false
+  end
+
+  create_table "public.flipper_features", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "key", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_flipper_features_on_key", unique: true
+  end
+
+  create_table "public.flipper_gates", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "feature_key", null: false
+    t.string "key", null: false
+    t.datetime "updated_at", null: false
+    t.text "value"
+    t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
   end
 
   create_table "public.notes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

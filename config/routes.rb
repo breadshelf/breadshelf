@@ -26,14 +26,16 @@ Rails.application.routes.draw do
     end
 
     namespace :api do
-      # post 'deliverability_event'
       post 'email_bounce'
       post 'email_complaint'
     end
   end
 
 
-  scope path: '/admin', as: 'admin' do
-    resources :events, controller: 'analytics/events', only: [:index]
+  constraints IsAdmin do
+    scope path: '/admin', as: 'admin' do
+      resources :events, controller: 'analytics/events', only: [:index]
+      mount Flipper::UI.app(Flipper) => '/flipper'
+    end
   end
 end

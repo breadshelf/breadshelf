@@ -1,6 +1,6 @@
 
 module Analytics
-  class EventsController < AdminController
+  class EventsController < ApplicationController
     def index
       @total_events = Analytics::Event.count
       @page_views = Analytics::Event.where(event: Event::EventName::PAGE_VIEW)

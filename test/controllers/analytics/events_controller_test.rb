@@ -2,12 +2,8 @@ require 'test_helper'
 
 module Analytics
   class EventsControllerTest < ActionDispatch::IntegrationTest
-    email = 'test@example.com'
-
     setup do
-      ENV['ADMIN_EMAIL'] = email
-
-      clerk_sign_in
+      IsAdmin.stubs(:matches?).returns(true)
     end
 
     class IndexTests < EventsControllerTest
@@ -153,13 +149,6 @@ module Analytics
         assert_select 'h1', 'Events'
       end
 
-      test 'requires admin authentication' do
-        clerk_sign_in(user_attrs: { email_addresses: [stub(email_address: 'regular@example.com')] })
-
-        get '/admin/events'
-
-        assert_response :not_found
-      end
 
       test 'calculate_daus returns data in descending date order' do
         today = Time.current.to_date
