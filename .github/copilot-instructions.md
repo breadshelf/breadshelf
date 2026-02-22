@@ -117,10 +117,17 @@ Each schema has separate migration paths (`db/migrate`, `db/analytics_migrate`, 
 
 ### Assets and Styling
 
-- **CSS:** Dart Sass (via `dartsass-rails`) with watch mode in `Procfile.dev`
+- **CSS:** Dart Sass (via `dartsass-rails`) with watch mode in `Procfile.dev`.
 - **JavaScript:** Hotwire stack (Turbo for SPA-like navigation, Stimulus for interactivity) with importmap-rails
 - **Forms:** SimpleForm for Rails form generation
 - **Email:** Premailer-Rails for inline email CSS
+
+### Design and CSS
+
+- We create views that are mobile first
+- Generally elements should be placed in the center of the page
+- We should handle mobile responsiveness with scss media queries. Specifically we use `@mixin mobile-responsive` to define our breakpoint.
+- We use Block Element Modifier (BEM) naming convention for CSS classes to maintain consistency and readability.
 
 ### Background Jobs and Queues
 
