@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v5.1.1
+        uses: aws-actions/configure-aws-credentials@v6.0.0
         with:
           aws-region: us-east-2
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v5.1.1
+        uses: aws-actions/configure-aws-credentials@v6.0.0
         with:
           aws-region: us-east-2
           role-to-assume: arn:aws:iam::040865381987:role/gha_role
@@ -101,7 +101,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v5.1.1
+        uses: aws-actions/configure-aws-credentials@v6.0.0
         with:
           aws-region: us-east-2
           role-to-assume: arn:aws:iam::040865381987:role/gha_role
