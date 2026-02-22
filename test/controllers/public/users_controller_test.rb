@@ -69,25 +69,23 @@ module Public
       end
     end
 
-    class UpdateSettingsTests < UsersControllerTest
-      test 'requires authentication' do
-        post '/users/settings'
+    class MVPFlagTests < UsersControllerTest
+      test 'shows landing page to authenticated users when mvp flag is disabled' do
+        clerk_sign_out
+        Flipper.disable(:mvp)
 
-        assert_response :not_found
+        get '/'
+
+        assert_response :success
       end
 
-      test 'updates user settings and redirects' do
-        user = users(:amy)
-        clerk_sign_in(user_attrs: { id: user.clerk_id })
+      test 'shows landing page to unauthenticated users regardless of mvp flag' do
+        clerk_sign_out
+        Flipper.enable(:mvp)
 
-        assert(user.reload.allow_emails? == true)
+        get '/'
 
-        put '/users/settings', params: { allow_emails: '0' }
-
-        assert_redirected_to('/users/settings')
-        follow_redirect!
-        assert_dom('p.flash', /Settings updated/)
-        assert_not(user.reload.allow_emails?)
+        assert_redirected_to new_entry_path
       end
     end
   end

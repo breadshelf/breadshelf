@@ -1,0 +1,15 @@
+<div class="entries-form-container">
+  <h1>What are you reading?</h1>
+  
+  <%= simple_form_for(:entry, url: entries_path, method: :post, local: true) do |f| %>
+    <div class="form-group">
+      <%= f.input :book_title, 
+          label: false,
+          placeholder: 'Enter book title',
+          required: true,
+          input_html: { class: 'book-title-input', data: { turbo: true } } %>
+    </div>
+    
+    <%= f.submit 'Next', class: 'button' %>
+  <% end %>
+</div>
