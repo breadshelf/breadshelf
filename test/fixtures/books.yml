@@ -4,9 +4,9 @@ _fixture:
   model_class: Public::Book
 
 titan:
-  title: Titan
-  author: Ron Chernow
+  title: titan
+  author: ron chernow
 
 thinking_fast_and_slow:
-  title: Thinking Fast and Slow
-  author: Daniel Kahneman
+  title: thinking fast and slow
+  author: daniel kahneman

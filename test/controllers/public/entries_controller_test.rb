@@ -21,6 +21,24 @@ module Public
         assert_response :success
         assert_dom 'h1', 'What are you reading?'
       end
+
+      test 'author field is hidden by default' do
+        clerk_sign_out
+
+        get new_entry_path
+
+        assert_response :success
+        assert_dom 'div[data-entries-toggle-target="authorField"][hidden]'
+      end
+
+      test 'toggle button is present in form' do
+        clerk_sign_out
+
+        get new_entry_path
+
+        assert_response :success
+        assert_dom 'button[data-entries-toggle-target="toggleButton"]'
+      end
     end
 
     class CreateTests < EntriesControllerTest
@@ -44,6 +62,28 @@ module Public
 
         assert_response :redirect
         assert_redirected_to new_entry_path
+      end
+
+      test 'stores author when provided' do
+        user = users(:amy)
+        clerk_sign_in(user_attrs: { id: user.clerk_id })
+
+        post entries_path, params: { entry: { book_title: 'New Book', author_name: 'Test Author' } }
+
+        assert_response :redirect
+        book = Public::Book.find_by(title: 'new book')
+        assert_equal 'test author', book.author
+      end
+
+      test 'creates entry without author when author field is empty' do
+        user = users(:amy)
+        clerk_sign_in(user_attrs: { id: user.clerk_id })
+
+        post entries_path, params: { entry: { book_title: 'Another Book', author_name: '' } }
+
+        assert_response :redirect
+        book = Public::Book.find_by(title: 'another book')
+        assert_nil book.author
       end
     end
   end
