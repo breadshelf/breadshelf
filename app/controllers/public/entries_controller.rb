@@ -1,8 +1,6 @@
 
 module Public
   class EntriesController < ApplicationController
-    def index; end
-
     def new
     end
 
@@ -12,7 +10,12 @@ module Public
 
       if current_user
         entry = Public::Entries::Create.call(user: current_user, book_title: book_title, author_name: author_name)
-        redirect_to entry_path(entry), notice: { message: 'Entry created successfully', status: 'success' }
+        respond_to do |format|
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.replace('entry-form', partial: 'success')
+          end
+          format.html { redirect_to entry_path(entry), notice: { message: 'Entry created successfully', status: 'success' } }
+        end
       else
         redirect_to new_entry_path, alert: { message: 'Please sign in to create an entry', status: 'error' }
       end
