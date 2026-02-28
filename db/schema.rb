@@ -10,13 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_07_172335) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_28_234950) do
   create_schema "analytics"
   create_schema "monitoring"
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
+
+  create_table "public.anonymous_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "public.books", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "author"
@@ -27,13 +32,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_172335) do
 
   create_table "public.entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "active", default: true, null: false
+    t.uuid "anonymous_user_id"
     t.uuid "book_id", null: false
     t.datetime "created_at", null: false
     t.integer "crumbs", default: 0, null: false
     t.datetime "end_time"
     t.datetime "start_time"
     t.datetime "updated_at", null: false
-    t.uuid "user_id", null: false
+    t.uuid "user_id"
+    t.index ["anonymous_user_id"], name: "index_entries_on_anonymous_user_id"
   end
 
   create_table "public.flipper_features", force: :cascade do |t|
@@ -83,6 +90,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_172335) do
     t.index ["clerk_id"], name: "index_users_on_clerk_id"
   end
 
+  add_foreign_key "public.entries", "public.anonymous_users"
   add_foreign_key "public.entries", "public.books"
   add_foreign_key "public.entries", "public.users"
   add_foreign_key "public.notes", "public.entries"
