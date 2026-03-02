@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
     anonymous_user_id = request.cookies[Public::AnonymousUsers::GetOrCreate::COOKIE_NAME]
     return if anonymous_user_id.blank?
 
-    @current_anonymous_user ||= Public::AnonymousUser.find_by(id: anonymous_user_id)
+    Public::AnonymousUser.find_by(id: anonymous_user_id)
   end
 
   private
