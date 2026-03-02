@@ -1,6 +1,8 @@
 
 module Public
   class EntriesController < ApplicationController
+    before_action :ensure_mvp_enabled
+
     def new
     end
 
@@ -24,6 +26,12 @@ module Public
 
     def entries_params
       params.require(:entry).permit(:book_title, :author_name)
+    end
+
+    def ensure_mvp_enabled
+      unless Flipper.enabled?(:mvp)
+        raise(ApplicationController::NotFoundError)
+      end
     end
   end
 end

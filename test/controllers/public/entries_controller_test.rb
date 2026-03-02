@@ -3,6 +3,10 @@ require 'mocha/minitest'
 
 module Public
   class EntriesControllerTest < ActionDispatch::IntegrationTest
+    setup do
+      Flipper.enable(:mvp)
+    end
+
     class NewTests < EntriesControllerTest
       test 'displays the new entry form when not signed in' do
         clerk_sign_out
@@ -38,6 +42,14 @@ module Public
 
         assert_response :success
         assert_dom 'button[data-entries-toggle-target="toggleButton"]'
+      end
+
+      test 'returns 404 when MVP feature is disabled' do
+        Flipper.disable(:mvp)
+
+        get new_entry_path
+
+        assert_response :not_found
       end
     end
 
@@ -84,6 +96,14 @@ module Public
         assert_response :redirect
         book = Public::Book.find_by(title: 'another book')
         assert_nil book.author
+      end
+
+      test 'returns 404 when MVP feature is disabled' do
+        Flipper.disable(:mvp)
+
+        post entries_path, params: { entry: { book_title: 'Test Book' } }
+
+        assert_response :not_found
       end
     end
   end
