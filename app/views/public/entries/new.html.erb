@@ -1,0 +1,36 @@
+<div class="entries-form-container">
+  <%= turbo_frame_tag 'entry-form' do %>
+    <h1>What are you reading?</h1>
+    
+    <%= simple_form_for(:entry, url: entries_path, method: :post, local: true) do |f| %>
+      <div data-controller="entries-toggle" class="entries-toggle">
+        <div class="form-group">
+          <div class="book-title-wrapper">
+            <%= f.input :book_title, 
+                label: false,
+                placeholder: 'Book title',
+                required: true,
+                input_html: { data: { turbo: true } } %>
+            <button type="button" 
+                    class="toggle-arrow" 
+                    data-action="entries-toggle#toggle"
+                    data-entries-toggle-target="toggleButton"
+                    aria-label="Show author field">
+              ▼
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group" data-entries-toggle-target="authorField" hidden>
+          <%= f.input :author_name, 
+              label: false,
+              placeholder: 'Author name (optional)',
+              required: false,
+              input_html: { data: { turbo: true } } %>
+        </div>
+      </div>
+      
+      <%= f.submit 'Next', class: 'button' %>
+    <% end %>
+  <% end %>
+</div>

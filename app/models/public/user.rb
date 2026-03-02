@@ -1,5 +1,6 @@
 module Public
   class User < ApplicationRecord
+    has_many(:entries)
     has_many(:user_settings)
 
     validates_uniqueness_of(:email)

@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     get 'data_policy' => 'information#data_policy'
     get 'privacy_policy' => 'information#privacy_policy'
 
+    resources :entries, only: [:new, :create, :show]
+
     resources :users do
       collection do
         put :sign_in
