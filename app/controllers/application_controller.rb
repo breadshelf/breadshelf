@@ -20,7 +20,10 @@ class ApplicationController < ActionController::Base
   end
 
   def current_anonymous_user
-    @current_anonymous_user ||= AnonymousUserManager.current_anonymous_user(request)
+    anonymous_user_id = request.cookies[Public::AnonymousUsers::GetOrCreate::COOKIE_NAME]
+    return if anonymous_user_id.blank?
+
+    @current_anonymous_user ||= Public::AnonymousUser.find_by(id: anonymous_user_id)
   end
 
   private
@@ -29,7 +32,7 @@ class ApplicationController < ActionController::Base
     return if clerk.user? rescue false
     return if current_anonymous_user.present?
 
-    AnonymousUserManager.get_or_create_anonymous_user(request, response)
+    Public::AnonymousUsers::GetOrCreate.call(request, response)
   end
 
   def not_found
