@@ -58,22 +58,31 @@ module Public
         user = users(:amy)
         clerk_sign_in(user_attrs: { id: user.clerk_id })
 
-        entry = user.entries.build
-        entry.book = books(:titan)
-        entry.save!
+        post entries_path, params: { entry: { book_title: 'test book' } }
 
-        post entries_path, params: { entry: { book_title: 'Titan' } }
+        book = Public::Book.find_by(title: 'test book')
+        assert book.present?
 
-        assert_response :redirect
+        entry = Public::Entry.find_by(book_id: book.id, user_id: user.id)
+        assert_redirected_to entry_path(entry)
       end
 
       test 'redirects to sign in when not authenticated' do
         clerk_sign_out
 
-        post entries_path, params: { entry: { book_title: 'Test Book' } }
+        anonymous_user = Public::AnonymousUser.create!
+
+        post entries_path,
+          headers: { 'HTTP_COOKIE' => "_anonymous_user_id=#{anonymous_user.id}" },
+          params: { entry: { book_title: 'Test Book' } }
 
         assert_response :redirect
-        assert_redirected_to new_entry_path
+
+        book = Public::Book.find_by(title: 'test book')
+        assert book.present?
+
+        entry = Public::Entry.find_by(anonymous_user_id: anonymous_user.id)
+        assert_redirected_to entry_path(entry)
       end
 
       test 'stores author when provided' do
