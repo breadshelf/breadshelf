@@ -7,15 +7,12 @@ module Public
     end
 
     def create
-      book_title = entries_params[:book_title]
-      author_name = entries_params[:author_name]
-
-      if current_user
-        entry = Public::Entries::Create.call(user: current_user, book_title: book_title, author_name: author_name)
-        redirect_to entry_path(entry), notice: { message: 'Entry created successfully', status: 'success' }
-      else
-        redirect_to new_entry_path, alert: { message: 'Please sign in to create an entry', status: 'error' }
-      end
+      entry = Public::Entries::Create.call(
+        book_details: entries_params,
+        user: current_user,
+        anonymous_user: current_anonymous_user
+      )
+      redirect_to entry_path(entry), notice: { message: 'Entry created successfully', status: 'success' }
     end
 
     def show
