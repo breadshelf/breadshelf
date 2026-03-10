@@ -4,6 +4,7 @@ module Public
     before_action :ensure_mvp_enabled
 
     def new
+      @last_entry = current_user&.entries&.last || current_anonymous_user&.entries&.last
     end
 
     def create

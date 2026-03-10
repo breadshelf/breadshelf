@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_28_234950) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_10_032656) do
   create_schema "analytics"
   create_schema "monitoring"
 
@@ -37,6 +37,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_28_234950) do
     t.datetime "created_at", null: false
     t.integer "crumbs", default: 0, null: false
     t.datetime "end_time"
+    t.boolean "finished_book", default: false
     t.datetime "start_time"
     t.datetime "updated_at", null: false
     t.uuid "user_id"
