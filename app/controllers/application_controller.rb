@@ -26,7 +26,6 @@ class ApplicationController < ActionController::Base
   private
 
   def set_anonymous_user_cookie
-    return if clerk&.user?
     return if current_user.present?
 
     Public::AnonymousUsers::GetOrCreate.call(request, response)
