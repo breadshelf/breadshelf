@@ -4,14 +4,13 @@ module Public
     before_action :ensure_mvp_enabled
 
     def new
-      @last_entry = current_user&.entries&.last || current_anonymous_user&.entries&.last
+      @last_entry = current_user&.entries&.last
     end
 
     def create
       entry = Public::Entries::Create.call(
         book_details: entries_params,
-        user: current_user,
-        anonymous_user: current_anonymous_user
+        user: current_user
       )
       redirect_to entry_path(entry), notice: { message: 'Entry created successfully', status: 'success' }
     end

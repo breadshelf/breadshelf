@@ -29,13 +29,12 @@ class Public::Entries::CreateTest < ActiveSupport::TestCase
   end
 
   def test_creates_entry_for_anonymous_user
-    anon_user = Public::AnonymousUser.create!
+    anon_user = Public::User.create!(anonymous: true)
 
-    result = Public::Entries::Create.call(anonymous_user: anon_user, book_details: { book_title: 'Anonymous Book' })
+    result = Public::Entries::Create.call(user: anon_user, book_details: { book_title: 'Anonymous Book' })
 
     assert result.persisted?
-    assert_equal anon_user.id, result.anonymous_user_id
-    assert_nil result.user_id
+    assert_equal anon_user.id, result.user_id
     assert_equal 'anonymous book', result.book.title
   end
 
