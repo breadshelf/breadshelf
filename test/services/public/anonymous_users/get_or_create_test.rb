@@ -9,7 +9,7 @@ module Public
       end
 
       test 'call returns existing user when cookie is valid' do
-        anon_user = Public::AnonymousUser.create!
+        anon_user = Public::User.create!(anonymous: true)
         @request.cookies[GetOrCreate::COOKIE_NAME] = anon_user.id
 
         user = GetOrCreate.call(@request, @response)
@@ -20,7 +20,8 @@ module Public
         user = GetOrCreate.call(@request, @response)
 
         assert user.persisted?
-        assert Public::AnonymousUser.find_by(id: user.id).present?
+        assert user.anonymous?
+        assert Public::User.find_by(id: user.id, anonymous: true).present?
       end
 
       test 'call sets cookie when creating new user' do
@@ -35,6 +36,7 @@ module Public
         user = GetOrCreate.call(@request, @response)
         assert user.persisted?
         assert_not_equal '00000000-0000-0000-0000-000000000000', user.id
+        assert user.anonymous?
       end
     end
   end

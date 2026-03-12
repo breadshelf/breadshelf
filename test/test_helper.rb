@@ -1,8 +1,8 @@
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
-require 'clerk_test_helper'
 require 'mocha/minitest'
+require 'clerk_test_helper'
 
 module ActiveSupport
   class TestCase
@@ -14,6 +14,12 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
     include ClerkTestHelper
+
+    setup do
+      # Initialize clerk for each test
+      # Is overridden in individual tests if needed
+      clerk_sign_out
+    end
 
     teardown do
       # Clean up clerk override after each test

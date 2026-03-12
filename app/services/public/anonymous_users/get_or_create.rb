@@ -13,11 +13,11 @@ module Public
         cookie_id = @request.cookies[COOKIE_NAME]
 
         if cookie_id.present?
-          user = Public::AnonymousUser.find_by(id: cookie_id)
+          user = Public::User.find_by(id: cookie_id, anonymous: true)
           return user if user.present?
         end
 
-        new_user = Public::AnonymousUser.create!
+        new_user = Public::User.create!(anonymous: true)
         set_cookie(new_user.id)
         new_user
       end

@@ -70,7 +70,7 @@ module Public
       test 'redirects to sign in when not authenticated' do
         clerk_sign_out
 
-        anonymous_user = Public::AnonymousUser.create!
+        anonymous_user = Public::User.create!(anonymous: true)
 
         post entries_path,
           headers: { 'HTTP_COOKIE' => "_anonymous_user_id=#{anonymous_user.id}" },
@@ -81,7 +81,7 @@ module Public
         book = Public::Book.find_by(title: 'test book')
         assert book.present?
 
-        entry = Public::Entry.find_by(anonymous_user_id: anonymous_user.id)
+        entry = Public::Entry.find_by(user_id: anonymous_user.id)
         assert_redirected_to entry_path(entry)
       end
 
