@@ -9,15 +9,16 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  # Defines the root path route ("/")
-
   scope module: :public do
-    root 'users#landing'
+    root 'user_books#index'
+    get 'welcome' => 'users#landing'
     get 'about' => 'information#about'
     get 'data_policy' => 'information#data_policy'
     get 'privacy_policy' => 'information#privacy_policy'
 
     resources :entries, only: [:new, :create, :show]
+
+    resources :user_books, path: 'books', only: [:index, :new, :create]
 
     resources :users do
       collection do
