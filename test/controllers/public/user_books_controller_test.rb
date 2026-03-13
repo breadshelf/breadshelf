@@ -56,7 +56,8 @@ module Public
       get '/user_books', headers: { 'Turbo-Frame' => 'landing-content' }
 
       assert_response :success
-      assert_dom('turbo-frame#user_books_list')
+      # index template uses turbo_frame_tag 'books'
+      assert_dom('turbo-frame#books')
     end
   end
 end

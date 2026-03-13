@@ -2,19 +2,17 @@ module Public
   class UserBooksController < ApplicationController
     def index
       unless Flipper.enabled?(:mvp)
-        redirect_to '/welcome' and return
+        redirect_to '/welcome'
+        return
       end
 
-      if current_user.user_books.active.empty?
-        redirect_to new_user_book_path and return
+      if current_user.nil? || current_user.user_books.active.empty?
+        redirect_to new_user_book_path
+        return
       end
 
       # Fallback to direct query if service object is not available
-      @user_books = if defined?(Public::UserBooks::List)
-        Public::UserBooks::List.call(user: current_user, params: params)
-      else
-        current_user.user_books.includes(:book).where(active: true)
-      end
+      @user_books = current_user.user_books.includes(:book).where(active: true)
     end
 
     def new

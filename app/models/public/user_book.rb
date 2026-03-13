@@ -5,5 +5,7 @@ module Public
 
     validates :user, presence: true
     validates :book, presence: true
+
+    scope :active, -> { where(active: true) }
   end
 end
