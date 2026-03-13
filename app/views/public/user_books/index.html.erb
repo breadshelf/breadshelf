@@ -1,0 +1,15 @@
+<div>
+  <h1 class="user-books__heading">Your books</h1>
+  <ul class="user-books__list">
+    <% @user_books.each do |user_book| %>
+      <li class="user-books__item">
+        <strong><%= user_book.book.title %></strong>
+        <% if user_book.book.author.present? %>
+          <span class="user-books__author">by <%= user_book.book.author %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <%= link_to 'Add a book', new_user_book_path, class: 'button user-books__add' %>
+</div>
+

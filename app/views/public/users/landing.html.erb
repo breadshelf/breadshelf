@@ -1,28 +1,34 @@
-<div class="sign-up-container" data-controller="clerk">
-    <h1 class="header">breadshelf is coming soon!</h1>
-    <%= image_tag('crumbs.svg', alt: 'breadshelf crumbs', class: 'icon') %>
-    <div data-clerk-target="loading">
-        <p>Loading...</p>
-    </div>
+<% if Flipper.enabled?(:mvp) && @landing_frame_src.present? %>
+  <%= turbo_frame_tag "landing-content", src: @landing_frame_src do %>
+    <p>Loading...</p>
+  <% end %>
+<% else %>
+  <div class="sign-up-container" data-controller="clerk">
+      <h1 class="header">breadshelf is coming soon!</h1>
+      <%= image_tag('crumbs.svg', alt: 'breadshelf crumbs', class: 'icon') %>
+      <div data-clerk-target="loading">
+          <p>Loading...</p>
+      </div>
 
-    <div data-clerk-target="message" hidden="true">
-        <% if @user_exists %>
-            <p>You're signed up! We'll update you soon. In the meantime, make sure you're following us on social media!</p>
-            <% if Rails.env == 'development' %>
-                <button class="button" data-action="click->clerk#signOut">Sign out</button>
-            <% end %>
-        <% else %>
-            <p>Sign up to receive an email when we're ready for you.</p>
-        <% end %>
-        <div id="clerk-node" class="clerk-container"></div>
-    </div>
-    
-    <div class="learn-more-link">
-        <%= link_to('Learn about us', '/about', class: 'link',) %>
-    </div>
-    <div class="socials">
-        <a class="link" href="https://www.instagram.com/readonbreadshelf" target="_blank">Instagram</a>
-        <a class="link" href="https://www.tiktok.com/@readonbreadshelf" target="_blank">Tik Tok</a>
-        <a class="link" href="https://x.com/readbreadshelf" target="_blank">X/Twitter</a>
-    </div>
-</div>
+      <div data-clerk-target="message" hidden="true">
+          <% if @user_exists %>
+              <p>You're signed up! We'll update you soon. In the meantime, make sure you're following us on social media!</p>
+              <% if Rails.env == 'development' %>
+                  <button class="button" data-action="click->clerk#signOut">Sign out</button>
+              <% end %>
+          <% else %>
+              <p>Sign up to receive an email when we're ready for you.</p>
+          <% end %>
+          <div id="clerk-node" class="clerk-container"></div>
+      </div>
+      
+      <div class="learn-more-link">
+          <%= link_to('Learn about us', '/about', class: 'link',) %>
+      </div>
+      <div class="socials">
+          <a class="link" href="https://www.instagram.com/readonbreadshelf" target="_blank">Instagram</a>
+          <a class="link" href="https://www.tiktok.com/@readonbreadshelf" target="_blank">Tik Tok</a>
+          <a class="link" href="https://x.com/readbreadshelf" target="_blank">X/Twitter</a>
+      </div>
+  </div>
+<% end %>
