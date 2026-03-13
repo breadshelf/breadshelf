@@ -85,7 +85,36 @@ module Public
 
         get '/'
 
-        assert_redirected_to new_entry_path
+        assert_response :success
+      end
+
+      test 'authenticated user with active user_books loads user_books index frame' do
+        user = users(:amy)
+        clerk_sign_in(user_attrs: { id: user.clerk_id })
+
+        book = Public::Book.create!(title: 'Active Book')
+        Public::UserBook.create!(user: user, book: book, active: true)
+
+        Flipper.enable(:mvp)
+
+        get '/'
+
+        assert_response :success
+        assert_dom('turbo-frame[src="/books"]')
+      end
+
+      test 'authenticated user without active user_books loads new user_book frame' do
+        user = users(:amy)
+        clerk_sign_in(user_attrs: { id: user.clerk_id })
+
+        Public::UserBook.where(user_id: user.id).delete_all
+
+        Flipper.enable(:mvp)
+
+        get '/'
+
+        assert_response :success
+        assert_dom('turbo-frame[src="/user_books/new"]')
       end
     end
   end

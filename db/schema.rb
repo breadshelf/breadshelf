@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_11_033007) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_12_030902) do
   create_schema "analytics"
   create_schema "monitoring"
 
@@ -66,6 +66,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_11_033007) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "public.user_books", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.uuid "book_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "user_id", null: false
+    t.index ["book_id"], name: "index_user_books_on_book_id"
+    t.index ["user_id", "book_id"], name: "index_user_books_on_user_id_and_book_id"
+    t.index ["user_id"], name: "index_user_books_on_user_id"
+  end
+
   create_table "public.user_settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.boolean "enabled", default: false, null: false
@@ -88,6 +99,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_11_033007) do
   add_foreign_key "public.entries", "public.books"
   add_foreign_key "public.entries", "public.users"
   add_foreign_key "public.notes", "public.entries"
+  add_foreign_key "public.user_books", "public.books"
+  add_foreign_key "public.user_books", "public.users"
   add_foreign_key "public.user_settings", "public.settings"
   add_foreign_key "public.user_settings", "public.users"
 

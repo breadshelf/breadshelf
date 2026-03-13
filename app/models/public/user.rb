@@ -2,6 +2,8 @@ module Public
   class User < ApplicationRecord
     has_many(:entries)
     has_many(:user_settings)
+    has_many :user_books, class_name: 'Public::UserBook'
+    has_many :books, through: :user_books, source: :book
 
     validates :clerk_id, presence: true, unless: :anonymous?
     validates :email, presence: true, unless: :anonymous?

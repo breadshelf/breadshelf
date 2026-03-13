@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
-  after_action :set_anonymous_user_cookie
+  before_action :set_anonymous_user_cookie
 
   def current_user
     if clerk && clerk.user?

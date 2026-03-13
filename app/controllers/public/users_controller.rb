@@ -2,11 +2,6 @@
 module Public
   class UsersController < ApplicationController
     def landing
-      if Flipper.enabled?(:mvp)
-        redirect_to new_entry_path
-        return
-      end
-
       @user_exists = clerk.user?
       Analytics::Events::PageView.call(request.path)
     end
