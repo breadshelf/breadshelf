@@ -12,6 +12,7 @@
 @use "layouts/entries";
 @use "layouts/events";
 @use "layouts/settings";
+@use "layouts/user_books";
 
 body {
   background-color: var(--background-color);

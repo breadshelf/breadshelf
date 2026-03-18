@@ -1,7 +1,7 @@
 .button {
-  padding: var(--padding-md);
-  font-family: var(--font-family-serif);
-  border-radius: var(--border-radius-md);
+  padding: var(--padding-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--input-font-size);
   cursor: pointer;
 
   outline: none;

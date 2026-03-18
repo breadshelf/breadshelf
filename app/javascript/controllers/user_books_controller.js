@@ -6,7 +6,7 @@ export default class extends Controller {
   toggle() {
     const isHidden = this.authorFieldTarget.hidden;
     this.authorFieldTarget.hidden = !isHidden;
-    
+
     // Update arrow rotation based on state
     if (isHidden) {
       this.toggleButtonTarget.classList.add("open");

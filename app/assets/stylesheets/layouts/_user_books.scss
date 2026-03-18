@@ -1,0 +1,39 @@
+@use "mixins/mobile_responsive";
+
+.user-books-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1em auto;
+
+  @include mobile_responsive.mobile-container;
+}
+
+form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-md);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  background-color: black;
+  border-radius: var(--border-radius-sm);
+}
+
+.input-wrapper input {
+  flex: 1;
+  padding-right: 0;
+  background-color: black;
+  border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
+}
