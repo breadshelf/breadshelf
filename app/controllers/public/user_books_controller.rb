@@ -11,7 +11,6 @@ module Public
         return
       end
 
-      # Fallback to direct query if service object is not available
       @user_books = current_user.user_books.includes(:book).where(active: true)
     end
 
@@ -19,13 +18,11 @@ module Public
     end
 
     def create
-      result = Public::UserBooks::Create.call(user: current_user, book_params: book_params)
+      user_book = Public::UserBooks::Create.call(user: current_user, book_params: book_params)
 
-      if result.success?
+      if user_book.persisted?
         redirect_to user_books_path, notice: { message: 'Book added', status: 'success' }
       else
-        @book = Public::Book.new(book_params)
-        @errors = result.errors
         render :new, status: :unprocessable_entity
       end
     end
@@ -33,7 +30,7 @@ module Public
     private
 
     def book_params
-      params.require(:book).permit(:title, :author, :isbn)
+      params.require(:book).require(:title).permit(:author)
     end
   end
 end

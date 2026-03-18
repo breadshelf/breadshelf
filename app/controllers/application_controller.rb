@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   def current_user
     if clerk && clerk.user?
       Public::User.find_by(clerk_id: clerk.user.id)
-    elsif (anonymous_user_id = request.cookies[Public::AnonymousUsers::GetOrCreate::COOKIE_NAME]).present?
+    elsif (anonymous_user_id = request.cookies[Public::Users::GetOrCreate::COOKIE_NAME]).present?
       Public::User.find_by(id: anonymous_user_id, anonymous: true)
     end
   end
@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   def set_anonymous_user_cookie
     return if current_user.present?
 
-    Public::AnonymousUsers::GetOrCreate.call(request, response)
+    Public::Users::GetOrCreate.call(request, response)
   end
 
   def not_found

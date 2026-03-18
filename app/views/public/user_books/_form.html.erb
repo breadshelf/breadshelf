@@ -1,10 +1,10 @@
 <div>
     <h1>What are you reading?</h1>
         
-    <%= simple_form_for(:entry, url: entries_path, method: :post, local: true) do |f| %>
+    <%= simple_form_for(:book, url: user_books_path, method: :post, local: true) do |f| %>
         <div data-controller="user-books" class="user-books form-group">
             <div class="input-wrapper">
-                <%= f.input :book_title, 
+                <%= f.input :title, 
                     label: false,
                     placeholder: 'Book title',
                     required: true,
@@ -19,7 +19,7 @@
             </div>
             <div data-user-books-target="authorField" hidden>
                 <div class="input-wrapper">
-                <%= f.input :author_name, 
+                <%= f.input :author, 
                     label: false,
                     placeholder: 'Author name (optional)',
                     required: false,
