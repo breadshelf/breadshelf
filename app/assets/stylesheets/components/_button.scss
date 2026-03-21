@@ -1,10 +1,25 @@
 .button {
-  padding: var(--padding-sm);
-  border-radius: var(--border-radius-sm);
+  padding: var(--padding-sm) var(--padding-md);
+  border-radius: var(--border-radius-md);
   font-size: var(--input-font-size);
+  font-family: inherit;
+  letter-spacing: 0.03em;
   cursor: pointer;
+
+  background-color: white;
+  color: var(--background-color);
 
   outline: none;
   border: none;
   box-sizing: border-box;
+
+  transition: opacity 0.15s ease, transform 0.1s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
 }

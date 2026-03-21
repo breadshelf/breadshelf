@@ -9,23 +9,14 @@
                     placeholder: 'Book title',
                     required: true,
                     input_html: { data: { turbo: true } } %>
-                <button type="button" 
-                        class="toggle-arrow" 
-                        data-action="user-books#toggle"
-                        data-user-books-target="toggleButton"
-                        aria-label="Show author field">
-                    ▼
-                </button>
             </div>
-            <div data-user-books-target="authorField" hidden>
-                <div class="input-wrapper">
+            <div class="input-wrapper">
                 <%= f.input :author, 
                     label: false,
                     placeholder: 'Author name (optional)',
                     required: false,
                     input_html: { data: { turbo: true } } %>
-                </div>
-            </div>  
+            </div>
             <%= f.submit 'Next', class: 'button' %>
         </div>
     <% end %>

@@ -4,6 +4,8 @@ module Public
       def initialize(title, author: nil)
         @title = title.downcase.strip
         @author = author.downcase.strip if author.present?
+
+        raise(ArgumentError, 'Title must exist') if @title
       end
 
       def call

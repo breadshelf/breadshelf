@@ -11,31 +11,6 @@
   @include mobile_responsive.mobile-container;
 }
 
-.toggle-arrow {
-  position: absolute;
-  right: 0;
-  background-color: black;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 0.8em;
-  padding: 0.5em 1em;
-  transition: transform 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
-  height: 100%;
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  &.open {
-    transform: rotate(180deg);
-  }
-}
-
 .entry-container .form-group {
   animation: slideDown 0.3s ease;
 

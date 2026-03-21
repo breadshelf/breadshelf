@@ -30,7 +30,7 @@ module Public
     private
 
     def book_params
-      params.require(:book).require(:title).permit(:author)
+      params.require(:book).permit(:title, :author)
     end
   end
 end

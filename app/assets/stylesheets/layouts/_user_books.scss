@@ -10,6 +10,41 @@
   @include mobile_responsive.mobile-container;
 }
 
+.user-books__heading {
+  width: 100%;
+  margin-bottom: 0.75em;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid var(--magenta);
+}
+
+.user-books__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.user-books__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  padding: var(--padding-sm) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.user-books__author {
+  font-size: 0.9em;
+  opacity: 0.6;
+}
+
+.user-books__add {
+  margin-top: var(--padding-md);
+}
+
 form {
   width: 100%;
   display: flex;
@@ -17,23 +52,14 @@ form {
   gap: var(--padding-md);
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-}
+.user-books-container .single-line-input {
+  font-family: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  box-sizing: border-box;
 
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: stretch;
-  background-color: black;
-  border-radius: var(--border-radius-sm);
-}
-
-.input-wrapper input {
-  flex: 1;
-  padding-right: 0;
-  background-color: black;
-  border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
+  &:focus {
+    border-color: var(--magenta);
+    outline: none;
+  }
 }
