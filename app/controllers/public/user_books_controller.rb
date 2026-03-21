@@ -12,6 +12,11 @@ module Public
       end
 
       @user_books = current_user.user_books.includes(:book).where(active: true)
+
+      @last_note_ids = @user_books.each_with_object({}) do |user_book, hash|
+        last_entry = Entry.where(user: current_user, book: user_book.book).order(:created_at).last
+        hash[user_book.id] = last_entry&.notes&.last&.id
+      end
     end
 
     def new

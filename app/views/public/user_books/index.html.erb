@@ -3,9 +3,19 @@
   <ul class="user-books__list">
     <% @user_books.each do |user_book| %>
       <li class="user-books__item">
-        <strong><%= user_book.book.title.titlecase %></strong>
-        <% if user_book.book.author.present? %>
-          <span class="user-books__author">by <%= user_book.book.author.titlecase %></span>
+        <% note_id = @last_note_ids[user_book.id] %>
+        <% if note_id %>
+          <%= link_to note_path(note_id), class: 'user-books__link' do %>
+            <strong><%= user_book.book.title.titlecase %></strong>
+            <% if user_book.book.author.present? %>
+              <span class="user-books__author">by <%= user_book.book.author.titlecase %></span>
+            <% end %>
+          <% end %>
+        <% else %>
+          <strong><%= user_book.book.title.titlecase %></strong>
+          <% if user_book.book.author.present? %>
+            <span class="user-books__author">by <%= user_book.book.author.titlecase %></span>
+          <% end %>
         <% end %>
       </li>
     <% end %>
