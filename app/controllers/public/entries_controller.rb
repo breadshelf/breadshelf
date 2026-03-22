@@ -12,10 +12,6 @@ module Public
       redirect_to read_path(entry_id: entry.id)
     end
 
-    def show
-      @entry = Entry.find(params[:id])
-    end
-
     def read
       @entry = Entry.find(params[:entry_id])
     end

@@ -23,66 +23,96 @@ module Public
       end
     end
 
-    class CreateTests < EntriesControllerTest
-      test 'redirects to success page when authenticated and entry is created' do
-        user = users(:amy)
-        clerk_sign_in(user_attrs: { id: user.clerk_id })
+    class ReadTests < EntriesControllerTest
+      test 'renders read page for a valid entry' do
+        entry = entries(:one)
 
-        post entries_path, params: { entry: { book_title: 'test book' } }
+        get read_path, params: { entry_id: entry.id }
 
-        book = Public::Book.find_by(title: 'test book')
-        assert book.present?
-
-        user_book = Public::UserBook.find_by(user: user, book: book)
-        entry = Public::Entry.find_by(user_book: user_book)
-        assert_redirected_to entry_path(entry)
+        assert_response :ok
       end
 
-      test 'redirects to sign in when not authenticated' do
-        clerk_sign_out
+      test 'returns 404 when entry is not found' do
+        get read_path, params: { entry_id: 'nonexistent-id' }
 
-        anonymous_user = Public::User.create!(anonymous: true)
-
-        post entries_path,
-          headers: { 'HTTP_COOKIE' => "_anonymous_user_id=#{anonymous_user.id}" },
-          params: { entry: { book_title: 'Test Book' } }
-
-        assert_response :redirect
-
-        book = Public::Book.find_by(title: 'test book')
-        assert book.present?
-
-        user_book = Public::UserBook.find_by(user: anonymous_user)
-        entry = Public::Entry.find_by(user_book: user_book)
-        assert_redirected_to entry_path(entry)
-      end
-
-      test 'stores author when provided' do
-        user = users(:amy)
-        clerk_sign_in(user_attrs: { id: user.clerk_id })
-
-        post entries_path, params: { entry: { book_title: 'New Book', author_name: 'Test Author' } }
-
-        assert_response :redirect
-        book = Public::Book.find_by(title: 'new book')
-        assert_equal 'test author', book.author
-      end
-
-      test 'creates entry without author when author field is empty' do
-        user = users(:amy)
-        clerk_sign_in(user_attrs: { id: user.clerk_id })
-
-        post entries_path, params: { entry: { book_title: 'Another Book', author_name: '' } }
-
-        assert_response :redirect
-        book = Public::Book.find_by(title: 'another book')
-        assert_nil book.author
+        assert_response :not_found
       end
 
       test 'returns 404 when MVP feature is disabled' do
         Flipper.disable(:mvp)
 
-        post entries_path, params: { entry: { book_title: 'Test Book' } }
+        get read_path, params: { entry_id: entries(:one).id }
+
+        assert_response :not_found
+      end
+    end
+
+    class StartTests < EntriesControllerTest
+      test 'sets start time on the entry and returns ok' do
+        entry = entries(:one)
+
+        patch start_entry_path(entry)
+
+        assert_response :ok
+        assert_not_nil entry.reload.start_time
+      end
+
+      test 'returns 404 when entry is not found' do
+        patch start_entry_path('nonexistent-id')
+
+        assert_response :not_found
+      end
+
+      test 'returns 404 when MVP feature is disabled' do
+        Flipper.disable(:mvp)
+
+        patch start_entry_path(entries(:one))
+
+        assert_response :not_found
+      end
+    end
+
+    class EndTests < EntriesControllerTest
+      test 'returns not implemented' do
+        patch end_entry_path(entries(:one))
+
+        assert_response :not_implemented
+      end
+
+      test 'returns 404 when MVP feature is disabled' do
+        Flipper.disable(:mvp)
+
+        patch end_entry_path(entries(:one))
+
+        assert_response :not_found
+      end
+    end
+
+    class CreateTests < EntriesControllerTest
+      test 'redirects to read page when authenticated and entry is created' do
+        user = users(:amy)
+        user_book = user_books(:amy_titan)
+        clerk_sign_in(user_attrs: { id: user.clerk_id })
+
+        post entries_path, params: { user_book_id: user_book.id }
+
+        entry = Public::Entry.where(user_book: user_book).order(created_at: :desc).first
+        assert_redirected_to read_path(entry_id: entry.id)
+      end
+
+      test 'raises error when user_book_id is missing' do
+        user = users(:amy)
+        clerk_sign_in(user_attrs: { id: user.clerk_id })
+
+        assert_raises(ArgumentError) do
+          post entries_path
+        end
+      end
+
+      test 'returns 404 when MVP feature is disabled' do
+        Flipper.disable(:mvp)
+
+        post entries_path, params: { user_book_id: user_books(:amy_titan).id }
 
         assert_response :not_found
       end
