@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get 'privacy_policy' => 'information#privacy_policy'
 
     resources :entries, only: [:new, :create, :show]
+    resources :notes, only: [:show]
 
     resources :user_books, path: 'books', only: [:index, :new, :create]
 

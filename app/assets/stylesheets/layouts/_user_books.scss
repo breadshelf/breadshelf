@@ -41,6 +41,17 @@
   opacity: 0.6;
 }
 
+.user-books__link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  color: var(--text-color);
+
+  &:hover strong {
+    color: var(--magenta);
+  }
+}
+
 .user-books__add {
   margin-top: var(--padding-md);
 }

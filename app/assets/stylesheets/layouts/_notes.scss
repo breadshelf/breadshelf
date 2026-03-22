@@ -1,0 +1,34 @@
+@use "mixins/mobile_responsive";
+
+.note-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1em auto;
+
+  @include mobile_responsive.mobile-container;
+}
+
+.note__book-title {
+  width: 100%;
+  margin-bottom: 0.25em;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid var(--magenta);
+}
+
+.note__author {
+  width: 100%;
+  font-size: 0.9em;
+  opacity: 0.6;
+  margin: 0 0 1.5em;
+}
+
+.note__content {
+  width: 100%;
+  margin-bottom: 1.5em;
+  line-height: 1.6;
+}
+
+.note__start-reading {
+  align-self: flex-start;
+}
