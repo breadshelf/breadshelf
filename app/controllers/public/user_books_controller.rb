@@ -38,7 +38,6 @@ module Public
     def check_mvp
       unless Flipper.enabled?(:mvp)
         redirect_to '/welcome'
-        return
       end
     end
   end
