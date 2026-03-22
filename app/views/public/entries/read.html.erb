@@ -1,8 +1,8 @@
 <div class="read-container"
      data-controller="timer"
-     data-timer-update-url-value="<%= entry_path(@entry) %>">
+     data-timer-update-url-value="<%= start_entry_path(@entry) %>">
   <div class="read__circle">
-    <span>Reading</span>
+    <span data-timer-target="command">Press start to read!</span>
   </div>
   <%= button_tag 'Start',
         class: 'button read__start',

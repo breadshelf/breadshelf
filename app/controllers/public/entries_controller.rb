@@ -8,31 +8,35 @@ module Public
     end
 
     def create
-      entry = Public::Entries::Create.call(
-        book_details: entries_params,
-        user: current_user
-      )
-      redirect_to entry_path(entry), notice: { message: 'Entry created successfully', status: 'success' }
+      if params[:user_book_id].present?
+        user_book = current_user.user_books.find(params[:user_book_id])
+        entry = Entry.create!(user_book: user_book)
+        redirect_to read_path(entry_id: entry.id)
+      else
+        entry = Public::Entries::Create.call(
+          book_details: entries_params,
+          user: current_user
+        )
+        redirect_to entry_path(entry), notice: { message: 'Entry created successfully', status: 'success' }
+      end
     end
 
     def show
       @entry = Entry.find(params[:id])
     end
 
-    def begin
-      user_book = current_user.user_books.find(params[:user_book_id])
-      entry = Entry.create!(user_book: user_book)
-      redirect_to read_path(entry_id: entry.id)
-    end
-
     def read
       @entry = Entry.find(params[:entry_id])
     end
 
-    def update
+    def start
       @entry = Entry.find(params[:id])
       @entry.update!(start_time: Time.current)
       head :ok
+    end
+
+    def end
+      head :not_implemented
     end
 
     private
