@@ -43,13 +43,26 @@
 
 .user-books__link {
   display: flex;
-  flex-direction: column;
-  gap: 0.15em;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   color: var(--text-color);
+
+  &::after {
+    content: '›';
+    font-size: 1.4em;
+    opacity: 0.6;
+  }
 
   &:hover strong {
     color: var(--magenta);
   }
+}
+
+.user-books__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
 }
 
 .user-books__add {

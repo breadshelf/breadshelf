@@ -5,7 +5,7 @@ module Public
         @title = title.downcase.strip
         @author = author.downcase.strip if author.present?
 
-        raise(ArgumentError, 'Title must exist') if @title
+        raise(ArgumentError, 'Title must exist') unless @title
       end
 
       def call

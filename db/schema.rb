@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_18_030937) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_22_004417) do
   create_schema "analytics"
   create_schema "monitoring"
 
@@ -27,14 +27,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_18_030937) do
 
   create_table "public.entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "active", default: true, null: false
-    t.uuid "book_id", null: false
     t.datetime "created_at", null: false
     t.integer "crumbs", default: 0, null: false
     t.datetime "end_time"
     t.boolean "finished_book", default: false
     t.datetime "start_time"
     t.datetime "updated_at", null: false
-    t.uuid "user_id"
+    t.uuid "user_book_id", null: false
+    t.index ["user_book_id"], name: "index_entries_on_user_book_id"
   end
 
   create_table "public.flipper_features", force: :cascade do |t|
@@ -96,8 +96,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_18_030937) do
     t.index ["clerk_id"], name: "index_users_on_clerk_id"
   end
 
-  add_foreign_key "public.entries", "public.books"
-  add_foreign_key "public.entries", "public.users"
+  add_foreign_key "public.entries", "public.user_books"
   add_foreign_key "public.notes", "public.entries"
   add_foreign_key "public.user_books", "public.books"
   add_foreign_key "public.user_books", "public.users"
