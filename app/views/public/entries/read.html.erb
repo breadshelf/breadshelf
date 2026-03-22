@@ -1,0 +1,10 @@
+<div class="read-container"
+     data-controller="timer"
+     data-timer-update-url-value="<%= entry_path(@entry) %>">
+  <div class="read__circle">
+    <span>Reading</span>
+  </div>
+  <%= button_tag 'Start',
+        class: 'button read__start',
+        data: { timer_target: 'start', action: 'timer#start' } %>
+</div>

@@ -14,9 +14,13 @@
             </span>
           <% end %>
         <% else %>
-          <strong><%= user_book.book.title.titlecase %></strong>
-          <% if user_book.book.author.present? %>
-            <span class="user-books__author">by <%= user_book.book.author.titlecase %></span>
+          <%= link_to begin_entry_path(user_book_id: user_book.id), class: 'user-books__link', data: { turbo_method: :post } do %>
+            <span class="user-books__text">
+              <strong><%= user_book.book.title.titlecase %></strong>
+              <% if user_book.book.author.present? %>
+                <span class="user-books__author">by <%= user_book.book.author.titlecase %></span>
+              <% end %>
+            </span>
           <% end %>
         <% end %>
       </li>

@@ -19,6 +19,22 @@ module Public
       @entry = Entry.find(params[:id])
     end
 
+    def begin
+      user_book = current_user.user_books.find(params[:user_book_id])
+      entry = Entry.create!(user_book: user_book)
+      redirect_to read_path(entry_id: entry.id)
+    end
+
+    def read
+      @entry = Entry.find(params[:entry_id])
+    end
+
+    def update
+      @entry = Entry.find(params[:id])
+      @entry.update!(start_time: Time.current)
+      head :ok
+    end
+
     private
 
     def entries_params
