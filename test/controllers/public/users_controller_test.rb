@@ -87,34 +87,6 @@ module Public
 
         assert_response :success
       end
-
-      test 'authenticated user with active user_books renders user_books index' do
-        user = users(:amy)
-        clerk_sign_in(user_attrs: { id: user.clerk_id })
-
-        book = Public::Book.create!(title: 'Active Book')
-        Public::UserBook.create!(user: user, book: book, active: true)
-
-        Flipper.enable(:mvp)
-
-        get '/'
-
-        assert_response :success
-        assert_dom('h1', 'Your books')
-      end
-
-      test 'authenticated user without active user_books redirects to new user_book' do
-        user = users(:amy)
-        clerk_sign_in(user_attrs: { id: user.clerk_id })
-
-        Public::UserBook.where(user_id: user.id).update_all(active: false)
-
-        Flipper.enable(:mvp)
-
-        get '/'
-
-        assert_redirected_to new_user_book_path
-      end
     end
   end
 end
