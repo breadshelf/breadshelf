@@ -1,9 +1,0 @@
-<%= turbo_frame_tag 'entry' do %>
-  <% if @last_entry&.finished_book %>
-    <%= render 'public/entries/new/new_book' %>
-  <% elsif @last_entry %>
-    <%= render 'public/entries/new/current_book', entry: @last_entry %>
-  <% else %>
-    <%= render 'public/entries/new/new_book' %>
-  <% end %>
-<% end %>

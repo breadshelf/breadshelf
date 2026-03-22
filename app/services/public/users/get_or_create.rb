@@ -1,5 +1,5 @@
 module Public
-  module AnonymousUsers
+  module Users
     class GetOrCreate < ApplicationService
       COOKIE_NAME = '_anonymous_user_id'
       COOKIE_DURATION = 400.days

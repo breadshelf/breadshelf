@@ -2,35 +2,37 @@ require 'test_helper'
 
 module Public
   class EntryTest < ActiveSupport::TestCase
-    test 'entry must belong to a user' do
-      book = Book.create!(title: 'Test Book')
-      entry = Entry.new(book: book)
+    test 'entry must belong to a user_book' do
+      entry = Entry.new
 
       assert_not entry.valid?
     end
 
-    test 'entry with user is valid' do
-      book = Book.create!(title: 'Test Book')
+    test 'entry with user_book is valid' do
       user = User.create!(email: 'test@example.com', clerk_id: 'clerk_1')
-      entry = Entry.create!(book: book, user: user)
+      book = Book.create!(title: 'Test Book')
+      user_book = UserBook.create!(user: user, book: book)
+      entry = Entry.create!(user_book: user_book)
 
       assert entry.valid?
       assert entry.persisted?
     end
 
-    test 'entry with anonymous user is valid' do
-      book = Book.create!(title: 'Test Book')
+    test 'entry with anonymous user_book is valid' do
       user = User.create!(anonymous: true)
-      entry = Entry.create!(book: book, user: user)
+      book = Book.create!(title: 'Test Book')
+      user_book = UserBook.create!(user: user, book: book)
+      entry = Entry.create!(user_book: user_book)
 
       assert entry.valid?
       assert entry.persisted?
     end
 
     test 'owner returns user' do
-      book = Book.create!(title: 'Test Book')
       user = User.create!(email: 'test@example.com', clerk_id: 'clerk_1')
-      entry = Entry.create!(book: book, user: user)
+      book = Book.create!(title: 'Test Book')
+      user_book = UserBook.create!(user: user, book: book)
+      entry = Entry.create!(user_book: user_book)
 
       assert_equal user, entry.owner
     end

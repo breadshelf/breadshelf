@@ -1,0 +1,14 @@
+<div class="note-container">
+  <h1 class="note__book-title"><%= @note.entry.user_book.book.title.titlecase %></h1>
+  <% if @note.entry.user_book.book.author.present? %>
+<p class="note__author">by <%= @note.entry.user_book.book.author.titlecase %></p>
+  <% end %>
+
+  <% if @note.content.present? %>
+    <div class="note__content">
+      <%= @note.content %>
+    </div>
+  <% end %>
+
+  <button class="button note__start-reading" disabled>Start reading</button>
+</div>

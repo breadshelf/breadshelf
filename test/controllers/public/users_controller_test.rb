@@ -7,7 +7,7 @@ module Public
       test 'displays a sign up prompt when not signed in' do
         clerk_sign_out
 
-        get '/'
+        get '/welcome'
 
         assert_response :success
         assert_dom 'p', "Sign up to receive an email when we're ready for you."
@@ -16,7 +16,7 @@ module Public
       test 'returns a signed up prompt when user exists' do
         clerk_sign_in(user_attrs: { id: 'user_1234' })
 
-        get '/'
+        get '/welcome'
         assert_response :success
         assert_dom 'p', "You're signed up! We'll update you soon. In the meantime, make sure you're following us on social media!"
       end
@@ -70,11 +70,11 @@ module Public
     end
 
     class MVPFlagTests < UsersControllerTest
-      test 'shows landing page to authenticated users when mvp flag is disabled' do
+      test 'shows landing page when mvp flag is disabled' do
         clerk_sign_out
         Flipper.disable(:mvp)
 
-        get '/'
+        get '/welcome'
 
         assert_response :success
       end
@@ -83,9 +83,9 @@ module Public
         clerk_sign_out
         Flipper.enable(:mvp)
 
-        get '/'
+        get '/welcome'
 
-        assert_redirected_to new_entry_path
+        assert_response :success
       end
     end
   end

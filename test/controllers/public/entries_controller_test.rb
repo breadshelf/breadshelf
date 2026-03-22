@@ -8,40 +8,10 @@ module Public
     end
 
     class NewTests < EntriesControllerTest
-      test 'displays the new entry form when not signed in' do
-        clerk_sign_out
-
+      test 'redirects to new user book path' do
         get new_entry_path
 
-        assert_response :success
-        assert_dom 'h1', 'What are you reading?'
-      end
-
-      test 'displays the new entry form when signed in' do
-        clerk_sign_in(user_attrs: { id: 'user_1234' })
-
-        get new_entry_path
-
-        assert_response :success
-        assert_dom 'h1', 'What are you reading?'
-      end
-
-      test 'author field is hidden by default' do
-        clerk_sign_out
-
-        get new_entry_path
-
-        assert_response :success
-        assert_dom 'div[data-entries-toggle-target="authorField"][hidden]'
-      end
-
-      test 'toggle button is present in form' do
-        clerk_sign_out
-
-        get new_entry_path
-
-        assert_response :success
-        assert_dom 'button[data-entries-toggle-target="toggleButton"]'
+        assert_redirected_to new_user_book_path
       end
 
       test 'returns 404 when MVP feature is disabled' do
@@ -63,7 +33,8 @@ module Public
         book = Public::Book.find_by(title: 'test book')
         assert book.present?
 
-        entry = Public::Entry.find_by(book_id: book.id, user_id: user.id)
+        user_book = Public::UserBook.find_by(user: user, book: book)
+        entry = Public::Entry.find_by(user_book: user_book)
         assert_redirected_to entry_path(entry)
       end
 
@@ -81,7 +52,8 @@ module Public
         book = Public::Book.find_by(title: 'test book')
         assert book.present?
 
-        entry = Public::Entry.find_by(user_id: anonymous_user.id)
+        user_book = Public::UserBook.find_by(user: anonymous_user)
+        entry = Public::Entry.find_by(user_book: user_book)
         assert_redirected_to entry_path(entry)
       end
 

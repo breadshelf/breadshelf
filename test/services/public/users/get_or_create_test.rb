@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Public
-  module AnonymousUsers
+  module Users
     class GetOrCreateTest < ActiveSupport::TestCase
       def setup
         @request = ActionDispatch::TestRequest.create

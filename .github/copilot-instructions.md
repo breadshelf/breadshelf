@@ -216,3 +216,7 @@ For analytics-specific migrations, Rails migrations automatically route to `db/a
 - Models use UUIDv7 primary keys (slightly larger but sortable by timestamp)
 - Parallel test execution is enabled by default
 - Feature flags help manage gradual rollouts without redeployment
+
+## Git
+
+- Never commit or push code unless explicitly asked to by a human. Always wait for a human to review and approve your code before it is merged into the main branch.
