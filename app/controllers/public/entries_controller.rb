@@ -4,7 +4,7 @@ module Public
     before_action :ensure_mvp_enabled
 
     def new
-      @last_entry = current_user&.entries&.last
+      redirect_to new_user_book_path
     end
 
     def create

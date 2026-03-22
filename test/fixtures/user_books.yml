@@ -1,0 +1,14 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+_fixture:
+  model_class: Public::UserBook
+
+amy_titan:
+  user: amy
+  book: titan
+  active: true
+
+noah_thinking_fast_and_slow:
+  user: noah
+  book: thinking_fast_and_slow
+  active: true

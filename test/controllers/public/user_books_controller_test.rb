@@ -7,7 +7,7 @@ module Public
 
       clerk_sign_in(user_attrs: { id: users(:amy).clerk_id })
 
-      get '/user_books'
+      get user_books_path
 
       assert_response :redirect
       assert_redirected_to '/welcome'
@@ -19,9 +19,9 @@ module Public
       user = users(:amy)
       clerk_sign_in(user_attrs: { id: user.clerk_id })
 
-      Public::UserBook.where(user_id: user.id).delete_all
+      Public::UserBook.where(user_id: user.id).update_all(active: false)
 
-      get '/user_books'
+      get user_books_path
 
       assert_response :redirect
       assert_redirected_to new_user_book_path
@@ -36,7 +36,7 @@ module Public
       book = Public::Book.create!(title: 'Active')
       Public::UserBook.create!(user: user, book: book, active: true)
 
-      get '/user_books'
+      get user_books_path
 
       assert_response :success
       # Use DOM assertions to verify list rendering instead of assigns
@@ -53,11 +53,10 @@ module Public
       book = Public::Book.create!(title: 'Active')
       Public::UserBook.create!(user: user, book: book, active: true)
 
-      get '/user_books', headers: { 'Turbo-Frame' => 'landing-content' }
+      get user_books_path, headers: { 'Turbo-Frame' => 'landing-content' }
 
       assert_response :success
-      # index template uses turbo_frame_tag 'books'
-      assert_dom('turbo-frame#books')
+      assert_dom('h1', 'Your books')
     end
   end
 end

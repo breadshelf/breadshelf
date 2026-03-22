@@ -1,6 +1,6 @@
 module Public
   class User < ApplicationRecord
-    has_many(:entries)
+    has_many :entries, through: :user_books
     has_many(:user_settings)
     has_many :user_books, class_name: 'Public::UserBook'
     has_many :books, through: :user_books, source: :book

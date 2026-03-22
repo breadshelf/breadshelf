@@ -10,7 +10,8 @@ module Public
       def call
         validate_title!
         book = Public::Books::FindOrCreate.call(@book_title, author: @author_name)
-        Entry.create!(user: @user, book: book)
+        user_book = @user.user_books.find_or_create_by!(book: book)
+        Entry.create!(user_book: user_book)
       end
 
       private

@@ -9,8 +9,8 @@ class Public::Entries::CreateTest < ActiveSupport::TestCase
     result = Public::Entries::Create.call(user: @user, book_details: { book_title: 'The Great Gatsby' })
 
     assert result.persisted?
-    assert_equal @user.id, result.user_id
-    assert_equal 'the great gatsby', result.book.title
+    assert_equal @user.id, result.user_book.user_id
+    assert_equal 'the great gatsby', result.user_book.book.title
   end
 
   def test_finds_existing_book_instead_of_creating_duplicate
@@ -18,14 +18,14 @@ class Public::Entries::CreateTest < ActiveSupport::TestCase
 
     result = Public::Entries::Create.call(user: @user, book_details: { book_title: book.title, author_name: book.author })
 
-    assert_equal book.id, result.book_id
+    assert_equal book.id, result.user_book.book_id
   end
 
   def test_creates_entry_with_author_name
     result = Public::Entries::Create.call(user: @user, book_details: { book_title: 'Test Book', author_name: 'Test Author' })
 
     assert result.persisted?
-    assert_equal 'test author', result.book.author
+    assert_equal 'test author', result.user_book.book.author
   end
 
   def test_creates_entry_for_anonymous_user
@@ -34,8 +34,8 @@ class Public::Entries::CreateTest < ActiveSupport::TestCase
     result = Public::Entries::Create.call(user: anon_user, book_details: { book_title: 'Anonymous Book' })
 
     assert result.persisted?
-    assert_equal anon_user.id, result.user_id
-    assert_equal 'anonymous book', result.book.title
+    assert_equal anon_user.id, result.user_book.user_id
+    assert_equal 'anonymous book', result.user_book.book.title
   end
 
   def test_raises_error_when_title_is_blank

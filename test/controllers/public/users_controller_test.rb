@@ -7,7 +7,7 @@ module Public
       test 'displays a sign up prompt when not signed in' do
         clerk_sign_out
 
-        get '/'
+        get '/welcome'
 
         assert_response :success
         assert_dom 'p', "Sign up to receive an email when we're ready for you."
@@ -16,7 +16,7 @@ module Public
       test 'returns a signed up prompt when user exists' do
         clerk_sign_in(user_attrs: { id: 'user_1234' })
 
-        get '/'
+        get '/welcome'
         assert_response :success
         assert_dom 'p', "You're signed up! We'll update you soon. In the meantime, make sure you're following us on social media!"
       end
@@ -70,11 +70,11 @@ module Public
     end
 
     class MVPFlagTests < UsersControllerTest
-      test 'shows landing page to authenticated users when mvp flag is disabled' do
+      test 'shows landing page when mvp flag is disabled' do
         clerk_sign_out
         Flipper.disable(:mvp)
 
-        get '/'
+        get '/welcome'
 
         assert_response :success
       end
@@ -83,12 +83,12 @@ module Public
         clerk_sign_out
         Flipper.enable(:mvp)
 
-        get '/'
+        get '/welcome'
 
         assert_response :success
       end
 
-      test 'authenticated user with active user_books loads user_books index frame' do
+      test 'authenticated user with active user_books renders user_books index' do
         user = users(:amy)
         clerk_sign_in(user_attrs: { id: user.clerk_id })
 
@@ -100,21 +100,20 @@ module Public
         get '/'
 
         assert_response :success
-        assert_dom('turbo-frame[src="/books"]')
+        assert_dom('h1', 'Your books')
       end
 
-      test 'authenticated user without active user_books loads new user_book frame' do
+      test 'authenticated user without active user_books redirects to new user_book' do
         user = users(:amy)
         clerk_sign_in(user_attrs: { id: user.clerk_id })
 
-        Public::UserBook.where(user_id: user.id).delete_all
+        Public::UserBook.where(user_id: user.id).update_all(active: false)
 
         Flipper.enable(:mvp)
 
         get '/'
 
-        assert_response :success
-        assert_dom('turbo-frame[src="/user_books/new"]')
+        assert_redirected_to new_user_book_path
       end
     end
   end
