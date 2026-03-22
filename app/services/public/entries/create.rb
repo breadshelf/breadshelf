@@ -1,23 +1,16 @@
 module Public
   module Entries
     class Create < ApplicationService
-      def initialize(book_details:, user:)
+      def initialize(user:, user_book_id:)
         @user = user
-        @book_title = book_details[:book_title]
-        @author_name = book_details[:author_name]
+        @user_book_id = user_book_id
       end
 
       def call
-        validate_title!
-        book = Public::Books::FindOrCreate.call(@book_title, author: @author_name)
-        user_book = @user.user_books.find_or_create_by!(book: book)
+        raise(ArgumentError, 'User book must exist') unless @user_book_id
+
+        user_book = @user.user_books.find(@user_book_id)
         Entry.create!(user_book: user_book)
-      end
-
-      private
-
-      def validate_title!
-        raise ArgumentError, 'Book title cannot be blank' if @book_title.blank?
       end
     end
   end

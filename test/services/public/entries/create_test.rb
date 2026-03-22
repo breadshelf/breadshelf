@@ -3,50 +3,27 @@ require 'test_helper'
 class Public::Entries::CreateTest < ActiveSupport::TestCase
   def setup
     @user = users(:amy)
+    @user_book = user_books(:amy_titan)
   end
 
-  def test_creates_an_entry_with_valid_parameters
-    result = Public::Entries::Create.call(user: @user, book_details: { book_title: 'The Great Gatsby' })
+  def test_creates_an_entry_for_a_user_book
+    result = Public::Entries::Create.call(user: @user, user_book_id: @user_book.id)
 
     assert result.persisted?
-    assert_equal @user.id, result.user_book.user_id
-    assert_equal 'the great gatsby', result.user_book.book.title
+    assert_equal @user_book.id, result.user_book_id
   end
 
-  def test_finds_existing_book_instead_of_creating_duplicate
-    book = books(:titan)
-
-    result = Public::Entries::Create.call(user: @user, book_details: { book_title: book.title, author_name: book.author })
-
-    assert_equal book.id, result.user_book.book_id
-  end
-
-  def test_creates_entry_with_author_name
-    result = Public::Entries::Create.call(user: @user, book_details: { book_title: 'Test Book', author_name: 'Test Author' })
-
-    assert result.persisted?
-    assert_equal 'test author', result.user_book.book.author
-  end
-
-  def test_creates_entry_for_anonymous_user
-    anon_user = Public::User.create!(anonymous: true)
-
-    result = Public::Entries::Create.call(user: anon_user, book_details: { book_title: 'Anonymous Book' })
-
-    assert result.persisted?
-    assert_equal anon_user.id, result.user_book.user_id
-    assert_equal 'anonymous book', result.user_book.book.title
-  end
-
-  def test_raises_error_when_title_is_blank
+  def test_raises_error_when_user_book_id_is_missing
     assert_raises(ArgumentError) do
-      Public::Entries::Create.call(user: @user, book_details: { book_title: '' })
+      Public::Entries::Create.call(user: @user, user_book_id: nil)
     end
   end
 
-  def test_raises_error_when_title_is_nil
-    assert_raises(ArgumentError) do
-      Public::Entries::Create.call(user: @user, book_details: { book_title: nil })
+  def test_raises_error_when_user_book_belongs_to_another_user
+    other_user_book = user_books(:noah_thinking_fast_and_slow)
+
+    assert_raises(ActiveRecord::RecordNotFound) do
+      Public::Entries::Create.call(user: @user, user_book_id: other_user_book.id)
     end
   end
 end
