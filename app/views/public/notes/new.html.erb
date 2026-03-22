@@ -1,0 +1,16 @@
+<div class="note-new-container">
+  <h1>Jot something down</h1>
+
+  <%= simple_form_for(:note, url: notes_path, method: :post) do |f| %>
+    <div class="input-wrapper">
+      <%= f.input :content,
+            as: :text,
+            label: false,
+            placeholder: 'A summary, a theme, anything to jumpstart you for next time...',
+            required: false,
+            input_html: { class: 'single-line-input' } %>
+    </div>
+    <%= hidden_field_tag :entry_id, @entry.id %>
+    <%= f.submit 'Save note', class: 'button' %>
+  <% end %>
+</div>

@@ -22,7 +22,8 @@ module Public
     end
 
     def end
-      head :not_implemented
+      entry = Public::Entries::End.call(entry_id: params[:id])
+      redirect_to new_note_path(entry_id: entry.id)
     end
 
     private

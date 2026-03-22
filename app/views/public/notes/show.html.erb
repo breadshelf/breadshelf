@@ -10,5 +10,5 @@
     </div>
   <% end %>
 
-  <%= link_to 'Start reading', begin_entry_path(user_book_id: @note.entry.user_book.id), class: 'button note__start-reading', data: { turbo_method: :post } %>
+  <%= button_to 'Start reading', entries_path(user_book_id: @note.entry.user_book.id), method: :post, class: 'button note__start-reading' %>
 </div>

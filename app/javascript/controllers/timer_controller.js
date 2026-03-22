@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["start", "command"]
+    static targets = ["start", "command", "finish"]
     static values = { updateUrl: String }
 
     connect() {
@@ -25,7 +25,8 @@ export default class extends Controller {
             body: JSON.stringify({})
         })
 
-        this.startTarget.disabled = true
+        this.startTarget.hidden = true
+        this.finishTarget.hidden = false
         this.element.querySelector('.read__circle').classList.add('read__circle--running')
         this.interval = setInterval(() => this.#tick(), 1000)
         this.commandTarget.innerHTML = 'Get reading!'

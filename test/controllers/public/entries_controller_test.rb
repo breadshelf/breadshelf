@@ -73,10 +73,13 @@ module Public
     end
 
     class EndTests < EntriesControllerTest
-      test 'returns not implemented' do
-        patch end_entry_path(entries(:one))
+      test 'sets end_time and redirects to new note page' do
+        entry = entries(:one)
 
-        assert_response :not_implemented
+        patch end_entry_path(entry)
+
+        assert_redirected_to new_note_path(entry_id: entry.id)
+        assert_not_nil entry.reload.end_time
       end
 
       test 'returns 404 when MVP feature is disabled' do

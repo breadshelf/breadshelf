@@ -23,7 +23,7 @@ Rails.application.routes.draw do
         patch :end
       end
     end
-    resources :notes, only: [:show]
+    resources :notes, only: [:show, :new, :create]
 
     resources :user_books, path: 'books', only: [:index, :new, :create]
 
