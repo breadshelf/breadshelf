@@ -1,11 +1,8 @@
 module Public
   class UserBooksController < ApplicationController
-    def index
-      unless Flipper.enabled?(:mvp)
-        redirect_to '/welcome'
-        return
-      end
+    before_action :check_mvp
 
+    def index
       if current_user.nil? || current_user.user_books.active.empty?
         redirect_to new_user_book_path
         return
@@ -36,6 +33,13 @@ module Public
 
     def book_params
       params.require(:book).permit(:title, :author)
+    end
+
+    def check_mvp
+      unless Flipper.enabled?(:mvp)
+        redirect_to '/welcome'
+        return
+      end
     end
   end
 end
