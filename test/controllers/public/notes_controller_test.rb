@@ -31,14 +31,22 @@ module Public
     end
 
     class CreateTests < NotesControllerTest
-      test 'creates note and redirects to note show' do
+      test 'creates note and returns ok' do
         entry = entries(:one)
 
         post notes_path, params: { entry_id: entry.id, note: { content: 'Great session' } }
 
         note = Public::Note.where(entry: entry).order(created_at: :desc).first
-        assert_redirected_to note_path(note)
+        assert_response :ok
         assert_equal 'Great session', note.content
+      end
+
+      test 'returns ok when content is blank' do
+        entry = entries(:one)
+
+        post notes_path, params: { entry_id: entry.id, note: { content: '' } }
+
+        assert_response :ok
       end
 
       test 'returns 404 when entry not found' do

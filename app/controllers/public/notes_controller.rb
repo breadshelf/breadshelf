@@ -10,8 +10,10 @@ module Public
     end
 
     def create
-      @note = Public::Notes::Create.call(entry_id: params[:entry_id], content: note_params[:content])
-      redirect_to note_path(@note)
+      unless note_params[:content].blank?
+        Public::Notes::Create.call(entry_id: params[:entry_id], content: note_params[:content])
+      end
+      head :ok
     end
 
     private

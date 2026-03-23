@@ -26,6 +26,19 @@ module Public
       redirect_to new_note_path(entry_id: entry.id)
     end
 
+    def finish
+      entry = Public::Entries::Finish.call(entry_id: params[:id])
+      redirect_to entry_path(entry), status: :see_other
+    end
+
+    def show
+      @entry = Entry.includes(notes: [], user_book: :book).find(params[:id])
+      @reading_crumbs = @entry.start_time && @entry.end_time ?
+        (@entry.end_time - @entry.start_time).to_i / 60 / 5 : 0
+      @note = @entry.notes.first
+      @note_crumbs = @note ? [@note.content.length / 100, 10].min : 0
+    end
+
     private
 
     def entries_params

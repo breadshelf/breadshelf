@@ -91,6 +91,47 @@ module Public
       end
     end
 
+    class FinishTests < EntriesControllerTest
+      test 'calculates crumbs and redirects to entry show' do
+        entry = entries(:one)
+
+        patch finish_entry_path(entry)
+
+        assert_redirected_to entry_path(entry)
+        assert entry.reload.crumbs >= 0
+      end
+
+      test 'returns 404 when MVP feature is disabled' do
+        Flipper.disable(:mvp)
+
+        patch finish_entry_path(entries(:one))
+
+        assert_response :not_found
+      end
+    end
+
+    class ShowTests < EntriesControllerTest
+      test 'renders entry show page' do
+        get entry_path(entries(:one))
+
+        assert_response :ok
+      end
+
+      test 'returns 404 when entry not found' do
+        get entry_path('nonexistent-id')
+
+        assert_response :not_found
+      end
+
+      test 'returns 404 when MVP feature is disabled' do
+        Flipper.disable(:mvp)
+
+        get entry_path(entries(:one))
+
+        assert_response :not_found
+      end
+    end
+
     class CreateTests < EntriesControllerTest
       test 'redirects to read page when authenticated and entry is created' do
         user = users(:amy)

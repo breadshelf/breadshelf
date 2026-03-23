@@ -15,6 +15,7 @@
 @use "layouts/notes";
 @use "layouts/user_books";
 @use "layouts/read";
+@use "layouts/entry_show";
 
 body {
   background-color: var(--background-color);

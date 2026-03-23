@@ -1,7 +1,10 @@
-<div class="note-new-container">
+<div class="note-new-container"
+     data-controller="note-form"
+     data-note-form-finish-url-value="<%= finish_entry_path(@entry) %>">
   <h1>Jot something down</h1>
 
-  <%= simple_form_for(:note, url: notes_path, method: :post) do |f| %>
+  <%= simple_form_for(:note, url: notes_path, method: :post,
+        html: { data: { action: 'submit->note-form#submit' } }) do |f| %>
     <div class="input-wrapper">
       <%= f.input :content,
             as: :text,
@@ -11,6 +14,8 @@
             input_html: { class: 'single-line-input' } %>
     </div>
     <%= hidden_field_tag :entry_id, @entry.id %>
-    <%= f.submit 'Save note', class: 'button' %>
+    <%= f.submit 'Finish', class: 'button' %>
   <% end %>
+
+  <%= button_to 'Skip', finish_entry_path(@entry), method: :patch, class: 'button button--ghost' %>
 </div>

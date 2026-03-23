@@ -1,0 +1,82 @@
+@use "mixins/mobile_responsive";
+
+.entry-show {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1em auto;
+  gap: 1.5em;
+
+  @include mobile_responsive.mobile-container;
+}
+
+.entry-show__title {
+  text-align: center;
+  margin: 0;
+}
+
+.entry-show__reward {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25em;
+}
+
+.entry-show__crumb-number {
+  font-size: 5em;
+  font-weight: 700;
+  color: var(--magenta);
+  line-height: 1;
+  min-width: 2ch;
+  text-align: center;
+}
+
+.entry-show__crumb-label {
+  font-size: 1.1em;
+  opacity: 0.7;
+  letter-spacing: 0.05em;
+}
+
+.entry-show__breakdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+  animation: entry-show-fade-in 0.5s ease forwards;
+}
+
+.entry-show__breakdown-item {
+  margin: 0;
+  opacity: 0.8;
+}
+
+.entry-show__share {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: entry-show-fade-in 0.5s ease 0.2s forwards;
+}
+
+.crumb-particle {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: auto;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform, opacity;
+}
+
+@keyframes entry-show-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
