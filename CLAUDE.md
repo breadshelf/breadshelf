@@ -83,6 +83,22 @@ Flipper is integrated. Check flags with `Flipper.enabled?(:feature_name)`. The F
 - Comments should be minimal — code should be self-documenting
 - Tests use Minitest with Mocha for mocking/stubbing; fixtures are loaded for all tests and run in parallel
 
+## Domain: Scoring System
+
+Breadshelf is a gamified reading app that incentivizes disengagement from digital devices. The scoring currency is **bread units**:
+
+- **Crumbs** — smallest unit
+- **Slices** — 12 crumbs = 1 slice
+- **Loaves** — 12 slices = 1 loaf
+
+### Earning Crumbs
+
+| Action | Crumbs |
+|--------|--------|
+| 5 minutes of reading | 1 |
+| 100 characters typed in a note | 1 (max 10 per note) |
+| Sharing a reading session on social media | 1 |
+
 ## Git
 
 Never commit or push code unless explicitly asked by a human.
