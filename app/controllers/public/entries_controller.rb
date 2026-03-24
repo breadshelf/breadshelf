@@ -31,7 +31,7 @@ module Public
     end
 
     def finish
-      entry = Public::Entries::Finish.call(entry_id: params[:id])
+      entry = Public::Entries::Finish.call(entry_id: params[:id], finished_book: params[:finished_book])
       redirect_to entry_path(entry), status: :see_other
     end
 

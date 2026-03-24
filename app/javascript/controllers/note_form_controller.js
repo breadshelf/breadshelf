@@ -4,7 +4,6 @@ export default class extends Controller {
     static values = { finishUrl: String }
 
     async submit(event) {
-        console.log('submitting')
         event.preventDefault()
         const csrf = document.querySelector('meta[name="csrf-token"]').content
 
@@ -14,10 +13,12 @@ export default class extends Controller {
             body: new FormData(event.target)
         })
 
-        console.log('before finish response', this.finishUrlValue)
+        const finishedBook = document.getElementById('finished_book')?.checked ?? false
+
         const finishResponse = await fetch(this.finishUrlValue, {
             method: 'PATCH',
-            headers: { 'X-CSRF-Token': csrf, 'Content-Type': 'application/json' }
+            headers: { 'X-CSRF-Token': csrf, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ finished_book: finishedBook })
         })
 
         Turbo.visit(finishResponse.url)

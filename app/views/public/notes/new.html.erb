@@ -14,6 +14,10 @@
             input_html: { class: 'single-line-input' } %>
       </div>
       <%= hidden_field_tag :entry_id, @entry.id %>
+      <div class="input-wrapper">
+        <%= check_box_tag :finished_book, '1', false, id: 'finished_book' %>
+        <%= label_tag :finished_book, "Finished #{@entry.user_book.book.title.titlecase}" %>
+      </div>
       <%= f.submit 'Review', class: 'button' %>
     <% end %>
 

@@ -101,6 +101,26 @@ module Public
         assert entry.reload.crumbs >= 0
       end
 
+      test 'saves finished_book true when param is passed' do
+        entry = entries(:one)
+
+        patch finish_entry_path(entry),
+          params: { finished_book: true },
+          as: :json
+
+        assert entry.reload.finished_book
+      end
+
+      test 'deactivates user_book when finished_book is true' do
+        entry = entries(:one)
+
+        patch finish_entry_path(entry),
+          params: { finished_book: true },
+          as: :json
+
+        assert_not entry.user_book.reload.active
+      end
+
       test 'returns 404 when MVP feature is disabled' do
         Flipper.disable(:mvp)
 

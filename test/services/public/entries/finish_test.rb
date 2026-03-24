@@ -51,4 +51,36 @@ class Public::Entries::FinishTest < ActiveSupport::TestCase
       Public::Entries::Finish.call(entry_id: 'nonexistent-id')
     end
   end
+
+  test 'sets finished_book to true on entry when passed' do
+    entry = entries(:one)
+
+    result = Public::Entries::Finish.call(entry_id: entry.id, finished_book: true)
+
+    assert result.finished_book
+  end
+
+  test 'finished_book defaults to false' do
+    entry = entries(:one)
+
+    result = Public::Entries::Finish.call(entry_id: entry.id)
+
+    assert_not result.finished_book
+  end
+
+  test 'sets user_book active to false when finished_book is true' do
+    entry = entries(:one)
+
+    Public::Entries::Finish.call(entry_id: entry.id, finished_book: true)
+
+    assert_not entry.user_book.reload.active
+  end
+
+  test 'does not change user_book active when finished_book is false' do
+    entry = entries(:one)
+
+    Public::Entries::Finish.call(entry_id: entry.id, finished_book: false)
+
+    assert entry.user_book.reload.active
+  end
 end

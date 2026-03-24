@@ -1,15 +1,15 @@
 module Public
   module Entries
     class Finish < ApplicationService
-      def initialize(entry_id:)
+      def initialize(entry_id:, finished_book: false)
         @entry_id = entry_id
+        @finished_book = finished_book
       end
 
       def call
         entry = Entry.find(@entry_id)
-        reading = reading_crumbs(entry)
-        note = note_crumbs(entry)
-        entry.update!(crumbs: reading + note_crumbs(entry))
+        entry.update!(crumbs: reading_crumbs(entry) + note_crumbs(entry), finished_book: @finished_book)
+        entry.user_book.update!(active: false) if @finished_book
         entry
       end
 
