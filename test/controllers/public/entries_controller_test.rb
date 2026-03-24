@@ -26,6 +26,7 @@ module Public
     class ReadTests < EntriesControllerTest
       test 'renders read page for a valid entry' do
         entry = entries(:one)
+        entry.update!(end_time: nil)
 
         get read_path, params: { entry_id: entry.id }
 

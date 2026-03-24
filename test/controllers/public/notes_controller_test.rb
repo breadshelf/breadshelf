@@ -18,7 +18,10 @@ module Public
 
     class NewTests < NotesControllerTest
       test 'renders new note page for a valid entry' do
-        get new_note_path(entry_id: entries(:one).id)
+        entry = entries(:one)
+        entry.notes.destroy_all
+
+        get new_note_path(entry_id: entry.id)
 
         assert_response :ok
       end
