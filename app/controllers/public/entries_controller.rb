@@ -14,6 +14,10 @@ module Public
 
     def read
       @entry = Entry.find(params[:entry_id])
+      if @entry.end_time.present?
+        redirect_to new_note_path(entry_id: @entry.id)
+        return
+      end
     end
 
     def start

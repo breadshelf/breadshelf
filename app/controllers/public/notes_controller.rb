@@ -6,6 +6,10 @@ module Public
 
     def new
       @entry = Entry.find(params[:entry_id])
+      if @entry.notes.any?
+        redirect_to entry_path(@entry)
+        return
+      end
       @note = Note.new
     end
 
