@@ -7,6 +7,8 @@
      data-crumbs-total-value="<%= @entry.crumbs %>"
      data-crumbs-reading-value="<%= @reading_crumbs %>"
      data-crumbs-note-value="<%= @note_crumbs %>"
+     data-crumbs-reading-minutes-value="<%= reading_minutes %>"
+     data-crumbs-book-title-value="<%= @entry.user_book.book.title.titlecase %>"
      data-crumbs-particle-src-value="<%= asset_path('crumbs.svg') %>">
 
   <h1 class="entry-show__title"><%= @entry.user_book.book.title.titlecase %></h1>
@@ -34,5 +36,10 @@
             data-crumbs-share-text-param="<%= share_text %>">
       Share / Copy
     </button>
+    <button class="button button--ghost" data-action="crumbs#shareInstagram">
+      Share on Instagram
+    </button>
   </div>
+
+  <canvas data-crumbs-target="shareCanvas" style="display:none"></canvas>
 </div>

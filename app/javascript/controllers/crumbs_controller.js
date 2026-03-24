@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["count", "breakdown", "readingCount", "noteCount", "share"]
-    static values = { total: Number, reading: Number, note: Number, particleSrc: String }
+    static targets = ["count", "breakdown", "readingCount", "noteCount", "share", "shareCanvas"]
+    static values = { total: Number, reading: Number, note: Number, particleSrc: String, readingMinutes: Number, bookTitle: String }
 
     connect() {
         this.#launchParticles()
@@ -16,6 +16,68 @@ export default class extends Controller {
             navigator.clipboard.writeText(shareText)
                 .then(() => alert('Copied to clipboard!'))
         }
+    }
+
+    async shareInstagram() {
+        const canvas = this.shareCanvasTarget
+        canvas.width = 1080
+        canvas.height = 1080
+        const ctx = canvas.getContext('2d')
+
+        ctx.fillStyle = '#1a1a2e'
+        ctx.fillRect(0, 0, 1080, 1080)
+
+        ctx.fillStyle = '#ffffff'
+        ctx.font = 'bold 72px sans-serif'
+        ctx.textAlign = 'center'
+        this.#wrapText(ctx, this.bookTitleValue, 540, 280, 900, 90)
+
+        ctx.fillStyle = '#e040fb'
+        ctx.font = 'bold 160px sans-serif'
+        ctx.fillText(this.totalValue, 540, 560)
+
+        ctx.fillStyle = '#ffffff'
+        ctx.font = '52px sans-serif'
+        ctx.fillText('crumbs earned', 540, 640)
+
+        ctx.font = '44px sans-serif'
+        ctx.fillStyle = '#aaaaaa'
+        const mins = this.readingMinutesValue
+        ctx.fillText(`${mins} minute${mins !== 1 ? 's' : ''} read`, 540, 730)
+
+        ctx.fillStyle = '#e040fb'
+        ctx.font = 'bold 40px sans-serif'
+        ctx.fillText('Breadshelf', 540, 980)
+
+        canvas.toBlob(async (blob) => {
+            const file = new File([blob], 'breadshelf.png', { type: 'image/png' })
+            if (navigator.canShare?.({ files: [file] })) {
+                await navigator.share({ files: [file], title: 'My Breadshelf session' })
+            } else {
+                const url = URL.createObjectURL(blob)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = 'breadshelf.png'
+                a.click()
+                URL.revokeObjectURL(url)
+            }
+        }, 'image/png')
+    }
+
+    #wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+        const words = text.split(' ')
+        let line = ''
+        for (const word of words) {
+            const test = line ? `${line} ${word}` : word
+            if (ctx.measureText(test).width > maxWidth && line) {
+                ctx.fillText(line, x, y)
+                line = word
+                y += lineHeight
+            } else {
+                line = test
+            }
+        }
+        ctx.fillText(line, x, y)
     }
 
     #animateCount() {
