@@ -5,17 +5,18 @@
 
   <%= simple_form_for(:note, url: notes_path, method: :post,
         html: { data: { action: 'submit->note-form#submit' } }) do |f| %>
-    <div class="input-wrapper">
-      <%= f.input :content,
+      <div class="input-wrapper">
+        <%= f.input :content,
             as: :text,
             label: false,
             placeholder: 'A summary, a theme, anything to jumpstart you for next time...',
             required: false,
             input_html: { class: 'single-line-input' } %>
-    </div>
-    <%= hidden_field_tag :entry_id, @entry.id %>
-    <%= f.submit 'Finish', class: 'button' %>
-  <% end %>
+      </div>
+      <%= hidden_field_tag :entry_id, @entry.id %>
+      <%= f.submit 'Review', class: 'button' %>
+    <% end %>
 
-  <%= button_to 'Skip', finish_entry_path(@entry), method: :patch, class: 'button button--ghost' %>
+    <%= button_to 'Skip', finish_entry_path(@entry), method: :patch, class: 'button button--ghost' %>
+  </div>
 </div>

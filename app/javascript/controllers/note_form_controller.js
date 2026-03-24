@@ -20,8 +20,6 @@ export default class extends Controller {
             headers: { 'X-CSRF-Token': csrf, 'Content-Type': 'application/json' }
         })
 
-        console.log('after finish response', finishResponse.url)
-
         Turbo.visit(finishResponse.url)
     }
 }

@@ -8,6 +8,9 @@
         class: 'button read__start',
         data: { timer_target: 'start', action: 'timer#start' } %>
   <div data-timer-target="finish" hidden>
-    <%= button_to 'Finish', end_entry_path(@entry), method: :patch, class: 'button' %>
+    <%= button_to 'Finish',
+        end_entry_path(@entry),
+        method: :patch,
+        class: 'button read__finish' %>
   </div>
 </div>
