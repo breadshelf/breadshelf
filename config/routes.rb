@@ -22,6 +22,7 @@ Rails.application.routes.draw do
         patch :start
         patch :end
         patch :finish
+        post :share
       end
     end
     resources :notes, only: [:show, :new, :create]

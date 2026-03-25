@@ -35,6 +35,12 @@ module Public
       redirect_to entry_path(entry), status: :see_other
     end
 
+    def share
+      entry = Entry.find(params[:id])
+      Public::Entries::Share.call(entry: entry)
+      head :ok
+    end
+
     def show
       @entry = Entry.includes(notes: [], user_book: :book).find(params[:id])
       @reading_crumbs = @entry.start_time && @entry.end_time ?

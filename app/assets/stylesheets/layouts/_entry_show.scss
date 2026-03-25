@@ -59,6 +59,14 @@
   animation: entry-show-fade-in 0.5s ease 0.2s forwards;
 }
 
+.entry-show__copy-confirmation {
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  font-size: 0.9em;
+  opacity: 0.7;
+}
+
 .crumb-particle {
   position: fixed;
   left: 0;

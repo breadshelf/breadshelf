@@ -1,6 +1,5 @@
 <% reading_minutes = @entry.start_time && @entry.end_time ? ((@entry.end_time - @entry.start_time) / 60).round : 0 %>
 <% share_text = "Just read for #{reading_minutes} minute#{'s' if reading_minutes != 1} and earned #{@entry.crumbs} crumb#{'s' if @entry.crumbs != 1} on Breadshelf! 📚🍞" %>
-<% twitter_url = "https://twitter.com/intent/tweet?text=#{CGI.escape(share_text)}" %>
 
 <div class="entry-show"
      data-controller="crumbs"
@@ -9,7 +8,9 @@
      data-crumbs-note-value="<%= @note_crumbs %>"
      data-crumbs-reading-minutes-value="<%= reading_minutes %>"
      data-crumbs-book-title-value="<%= @entry.user_book.book.title.titlecase %>"
-     data-crumbs-particle-src-value="<%= asset_path('crumbs.svg') %>">
+     data-crumbs-particle-src-value="<%= asset_path('crumbs.svg') %>"
+     data-crumbs-entry-id-value="<%= @entry.id %>"
+     data-crumbs-shared-value="<%= @entry.shared %>">
 
   <h1 class="entry-show__title"><%= @entry.user_book.book.title.titlecase %></h1>
 
@@ -25,20 +26,19 @@
     <p class="entry-show__breakdown-item">
       <span data-crumbs-target="noteCount">0</span> from your note
     </p>
+    <% if @entry.shared %>
+      <p class="entry-show__breakdown-item">
+        1 from sharing
+      </p>
+    <% end %>
   </div>
 
   <div class="entry-show__share" data-crumbs-target="share" hidden>
-    <%= link_to 'Share on Twitter', twitter_url,
-          target: '_blank', rel: 'noopener noreferrer',
-          class: 'button' %>
-    <button class="button button--ghost"
-            data-action="crumbs#share"
-            data-crumbs-share-text-param="<%= share_text %>">
-      Share / Copy
+    <button class="button" data-action="crumbs#share" data-crumbs-share-text-param="<%= share_text %>">
+      Share
     </button>
-    <button class="button button--ghost" data-action="crumbs#shareInstagram">
-      Share on Instagram
-    </button>
+    <%= link_to 'Next', '#', class: 'button button--ghost' %>
+    <p class="entry-show__copy-confirmation" data-crumbs-target="copyConfirmation" hidden>Copied to clipboard!</p>
   </div>
 
   <canvas data-crumbs-target="shareCanvas" style="display:none"></canvas>

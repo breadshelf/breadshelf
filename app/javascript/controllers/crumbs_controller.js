@@ -1,24 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["count", "breakdown", "readingCount", "noteCount", "share", "shareCanvas"]
-    static values = { total: Number, reading: Number, note: Number, particleSrc: String, readingMinutes: Number, bookTitle: String }
+    static targets = ["count", "breakdown", "readingCount", "noteCount", "share", "shareCanvas", "copyConfirmation"]
+    static values = { total: Number, reading: Number, note: Number, particleSrc: String, readingMinutes: Number, bookTitle: String, entryId: String, shared: Boolean }
 
     connect() {
         this.#launchParticles()
         this.#animateCount()
     }
 
-    share({ params: { shareText } }) {
-        if (navigator.share) {
-            navigator.share({ text: shareText })
-        } else {
-            navigator.clipboard.writeText(shareText)
-                .then(() => alert('Copied to clipboard!'))
-        }
-    }
-
-    async shareInstagram() {
+    async share({ params: { shareText } }) {
         const canvas = this.shareCanvasTarget
         canvas.width = 1080
         canvas.height = 1080
@@ -49,19 +40,67 @@ export default class extends Controller {
         ctx.font = 'bold 40px sans-serif'
         ctx.fillText('Breadshelf', 540, 980)
 
-        canvas.toBlob(async (blob) => {
-            const file = new File([blob], 'breadshelf.png', { type: 'image/png' })
-            if (navigator.canShare?.({ files: [file] })) {
-                await navigator.share({ files: [file], title: 'My Breadshelf session' })
-            } else {
-                const url = URL.createObjectURL(blob)
-                const a = document.createElement('a')
-                a.href = url
-                a.download = 'breadshelf.png'
-                a.click()
-                URL.revokeObjectURL(url)
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'))
+        const file = new File([blob], 'breadshelf.png', { type: 'image/png' })
+
+        let shared = false
+        if (navigator.share) {
+            try {
+                if (navigator.canShare?.({ files: [file] })) {
+                    await navigator.share({ files: [file], text: shareText })
+                } else {
+                    await navigator.share({ text: shareText })
+                }
+                shared = true
+            } catch (e) {
+                if (e.name !== 'AbortError') throw e
             }
-        }, 'image/png')
+        } else {
+            await navigator.clipboard.writeText(shareText)
+            this.#showCopyConfirmation()
+            shared = true
+        }
+
+        if (shared) {
+            this.#awardShareCrumb()
+        }
+    }
+
+    #awardShareCrumb() {
+        const entryId = this.entryIdValue
+        fetch(`/entries/${entryId}/share`, {
+            method: 'POST',
+            headers: { 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content }
+        })
+        if (!this.sharedValue) {
+            this.#animateBonusCrumb()
+        }
+        this.sharedValue = true
+    }
+
+    #showCopyConfirmation() {
+        this.copyConfirmationTarget.hidden = false
+        setTimeout(() => { this.copyConfirmationTarget.hidden = true }, 5000)
+    }
+
+    #animateBonusCrumb() {
+        const start = this.totalValue
+        const target = start + 1
+        const duration = 400
+        const startTime = performance.now()
+
+        const step = (now) => {
+            const progress = Math.min((now - startTime) / duration, 1)
+            const eased = 1 - Math.pow(1 - progress, 3)
+            this.countTarget.textContent = Math.floor(start + eased)
+            if (progress < 1) {
+                requestAnimationFrame(step)
+            } else {
+                this.countTarget.textContent = target
+            }
+        }
+
+        requestAnimationFrame(step)
     }
 
     #wrapText(ctx, text, x, y, maxWidth, lineHeight) {

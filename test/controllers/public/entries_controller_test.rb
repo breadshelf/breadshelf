@@ -131,6 +131,37 @@ module Public
       end
     end
 
+    class ShareTests < EntriesControllerTest
+      test 'awards share crumb and returns ok' do
+        entry = entries(:one)
+        original_crumbs = entry.crumbs
+
+        post share_entry_path(entry)
+
+        assert_response :ok
+        assert_equal original_crumbs + 1, entry.reload.crumbs
+        assert entry.reload.shared
+      end
+
+      test 'does not award crumb if already shared' do
+        entry = entries(:one)
+        entry.update!(shared: true, crumbs: 5)
+
+        post share_entry_path(entry)
+
+        assert_response :ok
+        assert_equal 5, entry.reload.crumbs
+      end
+
+      test 'returns 404 when MVP feature is disabled' do
+        Flipper.disable(:mvp)
+
+        post share_entry_path(entries(:one))
+
+        assert_response :not_found
+      end
+    end
+
     class ShowTests < EntriesControllerTest
       test 'renders entry show page' do
         get entry_path(entries(:one))
