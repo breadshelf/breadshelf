@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   scope module: :public do
     root 'user_books#index'
     get 'welcome' => 'users#landing'
+    get 'me' => 'users#show'
     get 'about' => 'information#about'
     get 'data_policy' => 'information#data_policy'
     get 'privacy_policy' => 'information#privacy_policy'

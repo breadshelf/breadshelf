@@ -1,0 +1,44 @@
+<div class="user-profile">
+  <div class="user-profile__score">
+    <div class="user-profile__stat">
+      <span class="user-profile__stat-value"><%= @loaves %></span>
+      <span class="user-profile__stat-label"><%= 'loaf'.pluralize(@loaves) %></span>
+    </div>
+    <div class="user-profile__stat">
+      <span class="user-profile__stat-value"><%= @slices %></span>
+      <span class="user-profile__stat-label"><%= 'slice'.pluralize(@slices) %></span>
+    </div>
+    <div class="user-profile__stat">
+      <span class="user-profile__stat-value"><%= @crumbs %></span>
+      <span class="user-profile__stat-label"><%= 'crumb'.pluralize(@crumbs) %></span>
+    </div>
+  </div>
+
+  <% if @user_books.any? %>
+    <div class="user-profile__books">
+      <h2 class="user-profile__books-heading">Currently reading</h2>
+      <ul class="user-profile__books-list">
+        <% @user_books.each do |user_book| %>
+          <li class="user-profile__books-item">
+            <% note_id = @last_note_ids[user_book.id] %>
+            <% if note_id %>
+              <%= link_to note_path(note_id), class: 'user-profile__books-link' do %>
+                <strong><%= user_book.book.title.titlecase %></strong>
+                <% if user_book.book.author.present? %>
+                  <span class="user-profile__books-author">by <%= user_book.book.author.titlecase %></span>
+                <% end %>
+              <% end %>
+            <% else %>
+              <%= link_to entries_path(user_book_id: user_book.id), class: 'user-profile__books-link', data: { turbo_method: :post } do %>
+                <strong><%= user_book.book.title.titlecase %></strong>
+                <% if user_book.book.author.present? %>
+                  <span class="user-profile__books-author">by <%= user_book.book.author.titlecase %></span>
+                <% end %>
+              <% end %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>
