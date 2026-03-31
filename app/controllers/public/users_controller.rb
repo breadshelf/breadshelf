@@ -22,11 +22,12 @@ module Public
     def show
       raise(NotFoundError) if current_user.nil?
 
+      @name = current_user.first_name
       total_crumbs = current_user.entries.sum(:crumbs)
       @loaves = total_crumbs / 144
       @slices = (total_crumbs % 144) / 12
       @crumbs = total_crumbs % 12
-      @user_books = current_user.user_books.active.includes(:book)
+      @user_books = current_user.user_books.includes(:book).order(active: :desc, created_at: :desc)
 
       @last_note_ids = @user_books.each_with_object({}) do |user_book, hash|
         last_entry = Entry.where(user_book: user_book).order(:created_at).last
