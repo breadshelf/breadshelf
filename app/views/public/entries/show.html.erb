@@ -26,11 +26,12 @@
     <p class="entry-show__breakdown-item">
       <span data-crumbs-target="noteCount">0</span> from your note
     </p>
-    <% if @entry.shared %>
-      <p class="entry-show__breakdown-item">
+    
+    <p
+      class="entry-show__breakdown-item"
+      data-crumbs-target="sharedDisplay">
         1 from sharing
-      </p>
-    <% end %>
+    </p>
   </div>
 
   <div class="entry-show__share" data-crumbs-target="share" hidden>

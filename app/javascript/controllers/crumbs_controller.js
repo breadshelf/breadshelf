@@ -1,12 +1,13 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["count", "breakdown", "readingCount", "noteCount", "share", "shareCanvas", "copyConfirmation"]
+    static targets = ["count", "breakdown", "readingCount", "noteCount", "share", "shareCanvas", "copyConfirmation", "sharedDisplay"]
     static values = { total: Number, reading: Number, note: Number, particleSrc: String, readingMinutes: Number, bookTitle: String, entryId: String, shared: Boolean }
 
     connect() {
         this.#launchParticles()
         this.#animateCount()
+        this.sharedDisplayTarget.hidden = !this.sharedValue
     }
 
     async share({ params: { shareText } }) {
@@ -75,7 +76,9 @@ export default class extends Controller {
         if (!this.sharedValue) {
             this.#animateBonusCrumb()
         }
+        console.log('setting shared')
         this.sharedValue = true
+        this.sharedDisplayTarget.hidden = false
     }
 
     #showCopyConfirmation() {
