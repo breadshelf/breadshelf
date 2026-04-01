@@ -25,15 +25,18 @@ module Public
       @slices = (total_crumbs % 144) / 12
       @crumbs = total_crumbs % 12
 
-      unless clerk.user?
-        @signed_in = false
-        return
-      end
+      crumbs_today = current_user.entries.where(created_at: Time.current.beginning_of_day..).sum(:crumbs)
+      @unlocked = crumbs_today >= 5
 
-      @signed_in = true
+      @signed_in = clerk.user?
+      return unless @signed_in
+
       raise(NotFoundError) if current_user.nil?
 
-      @name = current_user.first_name
+      @first_name = current_user.first_name
+    
+      return unless @unlocked
+      
       @user_books = current_user.user_books.includes(:book).order(active: :desc, created_at: :desc)
 
       @last_note_ids = @user_books.each_with_object({}) do |user_book, hash|
