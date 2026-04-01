@@ -1,0 +1,28 @@
+<% if @user_books.any? %>
+  <ul class="user-books__list">
+    <% @user_books.each do |user_book| %>
+      <li class="user-books__item">
+        <% note_id = @last_note_ids[user_book.id] %>
+        <% if note_id %>
+          <%= link_to note_path(note_id), class: 'user-books__link' do %>
+            <span class="user-books__text">
+              <strong><%= user_book.book.title.titlecase %><% if user_book.active? %><span class="user-profile__active-badge"> (active)</span><% end %></strong>
+              <% if user_book.book.author.present? %>
+                <span class="user-books__author">by <%= user_book.book.author.titlecase %></span>
+              <% end %>
+            </span>
+          <% end %>
+        <% else %>
+          <%= link_to entries_path(user_book_id: user_book.id), class: 'user-books__link', data: { turbo_method: :post } do %>
+            <span class="user-books__text">
+              <strong><%= user_book.book.title.titlecase %><% if user_book.active? %><span class="user-profile__active-badge"> (active)</span><% end %></strong>
+              <% if user_book.book.author.present? %>
+                <span class="user-books__author">by <%= user_book.book.author.titlecase %></span>
+              <% end %>
+            </span>
+          <% end %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

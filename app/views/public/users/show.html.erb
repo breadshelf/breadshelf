@@ -1,50 +1,33 @@
 <div class="user-profile">
-  <h1 class="user-profile__greeting">Hello<%= @first_name.present? ? ", #{@first_name}" : '' %>!</h1>
+  <h1 class="user-profile__greeting">
+    <% if @first_name.nil? %>
+      Welcome to Breadshelf!
+    <% else %>
+      Hello, <%= @first_name %>!
+    <% end %>
+  </h1>
 
   <div class="user-profile__score">
     <div class="user-profile__stat">
       <%= image_tag 'loaf.svg', alt: 'loaves', class: 'user-profile__stat-icon' %>
-      <span class="user-profile__stat-value"><%= @loaves %></span>
-      <span class="user-profile__stat-label"><%= 'loaf'.pluralize(@loaves) %></span>
+      <span class="user-profile__stat-value"><%= @loaves.to_i %></span>
+      <span class="user-profile__stat-label"><%= 'loaf'.pluralize(@loaves.to_i) %></span>
     </div>
     <div class="user-profile__stat">
       <%= image_tag 'slice.svg', alt: 'slices', class: 'user-profile__stat-icon' %>
-      <span class="user-profile__stat-value"><%= @slices %></span>
-      <span class="user-profile__stat-label"><%= 'slice'.pluralize(@slices) %></span>
+      <span class="user-profile__stat-value"><%= @slices.to_i %></span>
+      <span class="user-profile__stat-label"><%= 'slice'.pluralize(@slices.to_i) %></span>
     </div>
     <div class="user-profile__stat">
       <%= image_tag 'crumbs.svg', alt: 'crumbs', class: 'user-profile__stat-icon' %>
-      <span class="user-profile__stat-value"><%= @crumbs %></span>
-      <span class="user-profile__stat-label"><%= 'crumb'.pluralize(@crumbs) %></span>
+      <span class="user-profile__stat-value"><%= @crumbs.to_i %></span>
+      <span class="user-profile__stat-label"><%= 'crumb'.pluralize(@crumbs.to_i) %></span>
     </div>
   </div>
 
-  <% if @user_books.any? %>
-    <ul class="user-books__list">
-      <% @user_books.each do |user_book| %>
-        <li class="user-books__item">
-          <% note_id = @last_note_ids[user_book.id] %>
-          <% if note_id %>
-            <%= link_to note_path(note_id), class: 'user-books__link' do %>
-              <span class="user-books__text">
-                <strong><%= user_book.book.title.titlecase %><% if user_book.active? %><span class="user-profile__active-badge"> (active)</span><% end %></strong>
-                <% if user_book.book.author.present? %>
-                  <span class="user-books__author">by <%= user_book.book.author.titlecase %></span>
-                <% end %>
-              </span>
-            <% end %>
-          <% else %>
-            <%= link_to entries_path(user_book_id: user_book.id), class: 'user-books__link', data: { turbo_method: :post } do %>
-              <span class="user-books__text">
-                <strong><%= user_book.book.title.titlecase %><% if user_book.active? %><span class="user-profile__active-badge"> (active)</span><% end %></strong>
-                <% if user_book.book.author.present? %>
-                  <span class="user-books__author">by <%= user_book.book.author.titlecase %></span>
-                <% end %>
-              </span>
-            <% end %>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
+  <% if @signed_in %>
+    <%= render 'book_list' %>
+  <% else %>
+    <%= render 'sign_up' %>
   <% end %>
 </div>
