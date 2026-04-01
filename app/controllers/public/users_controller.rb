@@ -7,9 +7,11 @@ module Public
     end
 
     def sign_in
-      created = Public::Users::Create.call(clerk.user)
+      anon_user_id = request.cookies[Public::User::Constants::ANONYMOUS_USER_COOKIE]
+      created = Public::Users::Create.call(clerk.user, anon_user_id)
 
       email_address = clerk.user&.email_addresses&.first&.email_address
+
       if created
         Analytics::Events::SignUp.call(email_address)
       else
@@ -20,6 +22,8 @@ module Public
     end
 
     def show
+      raise(NotFoundError) if current_user.nil?
+
       total_crumbs = current_user.entries.sum(:crumbs)
       @loaves = total_crumbs / 144
       @slices = (total_crumbs % 144) / 12
@@ -27,16 +31,13 @@ module Public
 
       crumbs_today = current_user.entries.where(created_at: Time.current.beginning_of_day..).sum(:crumbs)
       @unlocked = crumbs_today >= 5
-
       @signed_in = clerk.user?
-      return unless @signed_in
-
-      raise(NotFoundError) if current_user.nil?
-
       @first_name = current_user.first_name
-    
+
+      puts "NOAHTEST #{@signed_in} #{@unlocked}"
+      return unless @signed_in
       return unless @unlocked
-      
+
       @user_books = current_user.user_books.includes(:book).order(active: :desc, created_at: :desc)
 
       @last_note_ids = @user_books.each_with_object({}) do |user_book, hash|

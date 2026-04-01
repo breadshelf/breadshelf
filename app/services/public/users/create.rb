@@ -1,8 +1,9 @@
 
 module Public
   class Users::Create < ApplicationService
-    def initialize(clerk_user)
+    def initialize(clerk_user, anon_user_id)
       @clerk_user = clerk_user
+      @anon_user = Public::User.find(anon_user_id) if anon_user_id.present?
     end
 
     def call
@@ -30,6 +31,12 @@ module Public
           enabled: true
         )
         UserMailer.with(user: user).welcome_email.deliver_later
+      end
+
+      if @anon_user
+        @anon_user.entries.update_all(user_id: user.id)
+        @anon_user.user_books.update_all(user_id: user.id)
+        @anon_user.destroy
       end
 
       created

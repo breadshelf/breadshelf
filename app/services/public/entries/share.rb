@@ -9,7 +9,7 @@ module Public
         puts "NOAHTEST #{@entry.inspect}"
         return @entry if @entry.shared
 
-        puts "NOAHTEST UPDATING"
+        puts 'NOAHTEST UPDATING'
         @entry.update!(crumbs: @entry.crumbs + 1, shared: true)
         @entry
       end

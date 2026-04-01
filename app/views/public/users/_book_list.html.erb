@@ -1,8 +1,8 @@
-<% if @user_books.any? %>
+<% if user_books.any? %>
   <ul class="user-books__list">
-    <% @user_books.each do |user_book| %>
+    <% user_books.each do |user_book| %>
       <li class="user-books__item">
-        <% note_id = @last_note_ids[user_book.id] %>
+        <% note_id = last_note_ids[user_book.id] %>
         <% if note_id %>
           <%= link_to note_path(note_id), class: 'user-books__link' do %>
             <span class="user-books__text">

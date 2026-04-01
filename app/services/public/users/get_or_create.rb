@@ -1,7 +1,6 @@
 module Public
   module Users
     class GetOrCreate < ApplicationService
-      COOKIE_NAME = '_anonymous_user_id'
       COOKIE_DURATION = 400.days
 
       def initialize(request, response)
@@ -10,7 +9,7 @@ module Public
       end
 
       def call
-        cookie_id = @request.cookies[COOKIE_NAME]
+        cookie_id = @request.cookies[Public::User::Constants::ANONYMOUS_USER_COOKIE]
 
         if cookie_id.present?
           user = Public::User.find_by(id: cookie_id, anonymous: true)
@@ -26,7 +25,7 @@ module Public
 
       def set_cookie(user_id)
         @response.set_cookie(
-          COOKIE_NAME,
+          Public::User::Constants::ANONYMOUS_USER_COOKIE,
           value: user_id,
           expires: COOKIE_DURATION.from_now,
           secure: Rails.env.production?,

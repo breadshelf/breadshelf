@@ -1,6 +1,5 @@
 module Public
   class User < ApplicationRecord
-    
     has_many :user_settings
     has_many :user_books, class_name: 'Public::UserBook'
     has_many :entries, through: :user_books, class_name: 'Public::Entry'
@@ -8,8 +7,12 @@ module Public
 
     validates :clerk_id, presence: true, unless: :anonymous?
     validates :email, presence: true, unless: :anonymous?
-    validates(:email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'must be a valid email address' }, allow_blank: true)
-    validates_uniqueness_of(:email, allow_blank: true)
+    validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'must be a valid email address' }, allow_blank: true
+    validates_uniqueness_of :email, allow_blank: true
+
+    module Constants
+      ANONYMOUS_USER_COOKIE = '_anonymous_user_id'
+    end
 
     def allow_emails?
       return false if anonymous?

@@ -30,9 +30,9 @@
     <%= link_to 'Read', '/', class: 'button button--ghost' %>
   <% end %>
 
-  <% if @signed_in %>
-    <%= render 'book_list' %>
-  <% else %>
+  <% if @signed_in && @unlocked %>
+    <%= render 'book_list', user_books: @user_books, last_note_ids: @last_note_ids %>
+  <% elsif !@signed_in %>
     <%= render 'sign_up' %>
   <% end %>
 </div>

@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     get 'data_policy' => 'information#data_policy'
     get 'privacy_policy' => 'information#privacy_policy'
 
-    get  'read' => 'entries#read'
+    get 'read' => 'entries#read'
     resources :entries, only: [:new, :create, :show] do
       member do
         patch :start
